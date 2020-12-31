@@ -1,7 +1,7 @@
 import { BigNumber } from '@0x/utils';
 import React from 'react';
 import { connect } from 'react-redux';
-import styled, { withTheme } from 'styled-components';
+import styled, { DefaultTheme, useTheme, withTheme } from 'styled-components';
 
 import { NETWORK_ID, RELAYER_URL } from '../../common/constants';
 import {
@@ -20,18 +20,21 @@ import {
     getWeb3State,
     getWethTokenBalance,
 } from '../../store/selectors';
-import { Theme, themeBreakPoints } from '../../themes/commons';
+import { Theme, themeBreakPoints , themeDimensions} from '../../themes/commons';
 import { getEtherscanLinkForToken, getEtherscanLinkForTokenAndAddress, tokenAmountInUnits } from '../../util/tokens';
 import { ButtonVariant, StoreState, Token, TokenBalance, TokenPrice, Wallet, Web3State } from '../../util/types';
 import { Button } from '../common/button';
 import { Card } from '../common/card';
 import { TokenIcon } from '../common/icons/token_icon';
 import { LoadingWrapper } from '../common/loading';
-import { CustomTD, Table, TH, THead, THLast, TR } from '../common/table';
+import { CustomTD, Table, TableTDProps, THStyled , TokenTD, CustomTDTokenName, THead, THLast, TR } from '../common/table';
 import { ZeroXInstantWidget } from '../erc20/common/0xinstant_widget';
 
 import { TransferTokenModal } from './wallet_transfer_token_modal';
 
+interface OwnProps {
+    theme : DefaultTheme
+}
 interface StateProps {
     ethBalance: BigNumber;
     tokenBalances: TokenBalance[];
@@ -42,9 +45,6 @@ interface StateProps {
     tokensPrice: TokenPrice[] | null;
     wallet: Wallet | null;
 }
-interface OwnProps {
-    theme: Theme;
-}
 
 interface DispatchProps {
     onStartToggleTokenLockSteps: (token: Token, isUnlocked: boolean) => void;
@@ -53,7 +53,7 @@ interface DispatchProps {
     onSetFiatType: any;
 }
 
-type Props = StateProps & DispatchProps & OwnProps;
+type Props = StateProps & DispatchProps & OwnProps ;
 
 interface State {
     modalIsOpen: boolean;
@@ -64,19 +64,6 @@ interface State {
     currencySelector: 'USD' | 'ETH';
 }
 
-const THStyled = styled(TH)`
-    &:first-child {
-        padding-right: 0;
-    }
-`;
-
-const TokenTD = styled(CustomTD)`
-    padding-bottom: 10px;
-    padding-right: 0;
-    padding-top: 10px;
-    width: 40px;
-`;
-
 const BuyETHButton = styled(Button)`
     margin-left: 5px;
 `;
@@ -85,9 +72,6 @@ const TokenIconStyled = styled(TokenIcon)`
     margin: 0 auto 0 0;
 `;
 
-const CustomTDTokenName = styled(CustomTD)`
-    white-space: nowrap;
-`;
 
 const TokenEtherscanLink = styled.a`
     align-items: center;
@@ -115,7 +99,26 @@ const QuantityEtherscanLink = styled.a`
     }
 `;
 
-const CustomTDLockIcon = styled(CustomTD)`
+const CustomTDLockIcon = styled.td<TableTDProps>`
+    border-bottom: ${props =>
+        props.styles && props.styles.borderBottom
+            ? `1px solid ${props.theme.componentsTheme.tableBorderColor}`
+            : 'none'};
+    border-top: ${props =>
+        props.styles && props.styles.borderTop ? `1px solid ${props.theme.componentsTheme.tableBorderColor}` : 'none'};
+    color: ${props => (props.styles && props.styles.color ? props.styles.color : props.theme.componentsTheme.tdColor)};
+    font-feature-settings: 'tnum' ${props => (props.styles && props.styles.tabular ? '1' : '0')};
+    font-size: ${props =>
+        props.styles && props.styles.fontSize ? props.styles.fontSize : props.theme.componentsTheme.tdFontSize};
+    font-weight: ${props => (props.styles && props.styles.fontWeight ? props.styles.fontWeight : 'normal')};
+    line-height: ${props => (props.styles && props.styles.lineWeight ? props.styles.lineWeight : '1.2')};
+    padding: 5px ${themeDimensions.horizontalPadding} 5px 0;
+    text-align: ${props =>
+        props.styles && props.styles.textAlign && props.styles.textAlign.length ? props.styles.textAlign : 'left'};
+
+    &:last-child {
+        padding-right: 0;
+}
     .lockedIcon {
         path {
             fill: ${props => props.theme.componentsTheme.iconLockedColor};
@@ -129,7 +132,27 @@ const CustomTDLockIcon = styled(CustomTD)`
     }
 `;
 
-const CustomTDPriceChange = styled(CustomTD)`
+const CustomTDPriceChange =styled.td<TableTDProps>`
+    border-bottom: ${props =>
+        props.styles && props.styles.borderBottom
+            ? `1px solid ${props.theme.componentsTheme.tableBorderColor}`
+            : 'none'};
+    border-top: ${props =>
+        props.styles && props.styles.borderTop ? `1px solid ${props.theme.componentsTheme.tableBorderColor}` : 'none'};
+    color: ${props => (props.styles && props.styles.color ? props.styles.color : props.theme.componentsTheme.tdColor)};
+    font-feature-settings: 'tnum' ${props => (props.styles && props.styles.tabular ? '1' : '0')};
+    font-size: ${props =>
+        props.styles && props.styles.fontSize ? props.styles.fontSize : props.theme.componentsTheme.tdFontSize};
+    font-weight: ${props => (props.styles && props.styles.fontWeight ? props.styles.fontWeight : 'normal')};
+    line-height: ${props => (props.styles && props.styles.lineWeight ? props.styles.lineWeight : '1.2')};
+    padding: 5px ${themeDimensions.horizontalPadding} 5px 0;
+    text-align: ${props =>
+        props.styles && props.styles.textAlign && props.styles.textAlign.length ? props.styles.textAlign : 'left'};
+
+    &,
+    &:last-child {
+        padding-left: ${themeDimensions.horizontalPadding};
+    }
     .lockedIcon {
         path {
             fill: ${props => props.theme.componentsTheme.iconLockedColor};
@@ -278,12 +301,12 @@ class WalletTokenBalances extends React.PureComponent<Props, State> {
             web3State,
             wethTokenBalance,
             ethAccount,
-            theme,
             tokensPrice,
             ethUsd,
             wallet,
             onClickOpenFiatOnRampModal,
             onSetFiatType,
+            theme,
         } = this.props;
 
         if (!wethTokenBalance) {

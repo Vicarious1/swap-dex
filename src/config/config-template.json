@@ -12,6 +12,7 @@
                 "1": "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2",
                 "3": "0xc778417e063141139fce010982780140aa0cd5ab",
                 "4": "0xc778417e063141139fce010982780140aa0cd5ab",
+                "5": "0xff67881f8d12f372d91baae9752eb3631ff0ed00",
                 "42": "0xd0a1e359811322d97991e03f863a0c30c2cf029c",
                 "50": "0x0b1ba0af832d7c05fd64161e0db78e85978e8082"
             },
@@ -48,7 +49,12 @@
             "primaryColor": "#ff7423",
             "icon": "assets/icons/zxb.svg",
             "addresses": {
-                "1": "0xb6ed7644c69416d67b522e20bc294a9a9b405b31"
+                "1": "0xb6ed7644c69416d67b522e20bc294a9a9b405b31",
+                "3": "0x06732516acd125b6e83c127752ed5f027e1b276e",
+                "5": "0xff67881f8d12f372d91baae9752eb3631ff0ed00",
+                "4": "0xb763e26cd6dd09d16f52dc3c60ebb77e46b03290",
+                "42": "0x7B6B10CAa9E8E9552bA72638eA5b47c25afea1f3",
+                "50": "0x34d402f14d58e001d8efbe6585051bf9706aa064"
             },
             "displayDecimals": 2,
             "id": "0xbtc",
@@ -64,7 +70,12 @@
             "icon": "assets/icons/bat.svg",
             "primaryColor": "#9e1f63",
             "addresses": {
-                "1": "0x0d8775f648430679a709e98d2b0cb6250d2887ef"
+                "1": "0x0d8775f648430679a709e98d2b0cb6250d2887ef",
+                "3": "0x06732516acd125b6e83c127752ed5f027e1b276e",
+                "5": "0xff67881f8d12f372d91baae9752eb3631ff0ed00",
+                "4": "0xb763e26cd6dd09d16f52dc3c60ebb77e46b03290",
+                "42": "0x7B6B10CAa9E8E9552bA72638eA5b47c25afea1f3",
+                "50": "0x34d402f14d58e001d8efbe6585051bf9706aa064"
             },
             "id": "basic-attention-token",
             "website": "https://basicattentiontoken.org/",
@@ -81,6 +92,7 @@
             "addresses": {
                 "1": "0x9f8F72aA9304c8B593d555F12eF6589cC3A579A2",
                 "3": "0x06732516acd125b6e83c127752ed5f027e1b276e",
+                "5": "0xff67881f8d12f372d91baae9752eb3631ff0ed00",
                 "4": "0xb763e26cd6dd09d16f52dc3c60ebb77e46b03290",
                 "42": "0x7B6B10CAa9E8E9552bA72638eA5b47c25afea1f3",
                 "50": "0x34d402f14d58e001d8efbe6585051bf9706aa064"

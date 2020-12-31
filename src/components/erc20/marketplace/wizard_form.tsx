@@ -20,11 +20,6 @@ import { PairsForm } from './wizard_form/pairs_form';
 import { ThemeForm } from './wizard_form/theme_form';
 import { TokensForm } from './wizard_form/tokens_form';
 
-interface OwnProps {
-    theme: Theme;
-}
-
-type Props = OwnProps;
 
 const Content = styled.div`
     display: flex;
@@ -50,7 +45,7 @@ const Introduction = styled.p`
     color: ${props => props.theme.componentsTheme.textColorCommon};
 `;
 
-const WizardForm = (_props: Props) => {
+const WizardForm = (_props) => {
     const configTemplate = ConfigTemplate.getConfig();
     const ethAccount = useSelector(getEthAccount);
     const dispatch = useDispatch();
@@ -286,6 +281,6 @@ const WizardForm = (_props: Props) => {
     );
 };
 
-const WizardFormWithTheme = withTheme(WizardForm);
+const WizardFormWithTheme = WizardForm;
 
 export { WizardForm, WizardFormWithTheme };

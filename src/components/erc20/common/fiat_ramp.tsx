@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
-import styled, { withTheme } from 'styled-components';
+import styled, { useTheme, withTheme } from 'styled-components';
 
 import { COINDIRECT_MERCHANT_ID, MOONPAY_API_KEY, WYRE_ID } from '../../../common/constants';
 import { Theme, themeBreakPoints } from '../../../themes/commons';
@@ -8,9 +8,6 @@ import { isMobile } from '../../../util/screen';
 import { useWindowSize } from '../../common/hooks/window_size_hook';
 import { PageLoading } from '../../common/page_loading';
 
-interface Props {
-    theme: Theme;
-}
 
 const ModalContent = styled.div`
     align-items: center;
@@ -49,8 +46,9 @@ const useQuery = () => {
     return new URLSearchParams(useLocation().search);
 };
 
-export const FiatOnRampModal = (props: Props) => {
+export const FiatOnRampModal = (props) => {
     const query = useQuery();
+    const theme = useTheme();
     const ethAccount = query.get('account');
     const fiatType = query.get('fiat-type') || 'cards';
     const coin = query.get('coin');
@@ -166,4 +164,4 @@ export const FiatOnRampModal = (props: Props) => {
     );
 };
 
-export const FiatOnRampModalContainer = withTheme(FiatOnRampModal);
+export const FiatOnRampModalContainer  = FiatOnRampModal;

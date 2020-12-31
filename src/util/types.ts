@@ -690,6 +690,7 @@ export interface GasInfo {
 }
 
 export enum ModalDisplay {
+    NoModal = "NO_MODAL",
     InstallMetamask = 'INSTALL_METAMASK',
     EnablePermissions = 'ACCEPT_PERMISSIONS',
     ConnectWallet = 'CONNECT_WALLET',

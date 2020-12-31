@@ -1,13 +1,13 @@
 import React from 'react';
 import ReactSVG from 'react-svg';
-import styled, { withTheme } from 'styled-components';
+import styled, { withTheme , DefaultTheme} from 'styled-components';
 
 import { Theme } from '../../../themes/commons';
 
 interface Props {
     isInline?: boolean;
     icon?: string;
-    theme: Theme;
+    theme: DefaultTheme;
 }
 
 const IconContainer = styled.div<{ color: string; isInline?: boolean }>`
@@ -27,20 +27,24 @@ const LogoIconContainer = (props: Props) => {
     const isImage = new RegExp('(http(s?):).*.(?:jpg|gif|png)');
     let Icon;
     if (isSvg.test(icon as string)) {
-        Icon =
-            // tslint:disable-next-line:jsx-no-lambda
-            icon ? <ReactSVG src={icon as string} fallback={() => fallBack} /> : fallBack;
+        Icon = styled.img`
+            width: 80%;
+            display: flex;
+        `;
     }
     if (isImage.test(icon as string)) {
-        Icon = icon ? <img src={icon as string} alt="logo" /> : fallBack;
+        Icon = styled.img`
+            width: 80%;
+            display: flex;
+        `;
     }
     if (!Icon) {
         return null;
     }
 
     return (
-        <IconContainer color={theme.componentsTheme.gray} {...restProps}>
-            {Icon}
+        <IconContainer color="transparent" {...restProps}>
+            <Icon src={icon as string} alt="logo"></Icon>
         </IconContainer>
     );
 };

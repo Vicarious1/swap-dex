@@ -116,7 +116,7 @@ const darkThemeColors: ThemeProperties = {
     thColor: '#B9B9B9',
     tooltipBackgroundColor: '#000',
     tooltipTextColor: '#fff',
-    topbarBackgroundColor: '#02112c',
+    topbarBackgroundColor: '#3b5998',
     // topbarBackgroundColor: '#081e6e',
     topbarBorderColor: '#000',
     topbarSeparatorColor: '#5A5A5A',

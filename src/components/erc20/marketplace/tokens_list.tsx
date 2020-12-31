@@ -5,29 +5,14 @@ import { getKnownTokens } from '../../../util/known_tokens';
 import { getEtherscanLinkForToken } from '../../../util/tokens';
 import { Card } from '../../common/card';
 import { TokenIcon } from '../../common/icons/token_icon';
-import { CustomTD, Table, TH, THead, TR } from '../../common/table';
+import { CustomTD, TokenTD, CustomTDTokenName, THStyled,Table, TH, THead, TR } from '../../common/table';
 import { IconType, Tooltip } from '../../common/tooltip';
 
-const THStyled = styled(TH)`
-    &:first-child {
-        padding-right: 0;
-    }
-`;
-
-const TokenTD = styled(CustomTD)`
-    padding-bottom: 10px;
-    padding-right: 0;
-    padding-top: 10px;
-    width: 40px;
-`;
 
 const TokenIconStyled = styled(TokenIcon)`
     margin: 0 auto 0 0;
 `;
 
-const CustomTDTokenName = styled(CustomTD)`
-    white-space: nowrap;
-`;
 
 const TooltipStyled = styled(Tooltip)`
     flex-wrap: wrap;

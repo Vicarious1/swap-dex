@@ -205,9 +205,8 @@ export class AtokenContract extends BaseContract {
             BaseContract._bigNumberToString,
         );
         // @ts-ignore
-        const iface = new ethers.utils.Interface(abi);
-        const deployInfo = iface.deployFunction;
-        const txData = deployInfo.encode(bytecode, [
+        const iface = new ethers.utils.Interface(abi,bytecode);
+        const txData = iface.encodeDeploy( [
             _addressesProvider,
             _underlyingAsset,
             _underlyingAssetDecimals,

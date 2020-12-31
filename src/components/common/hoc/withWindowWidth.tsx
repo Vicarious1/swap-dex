@@ -6,7 +6,7 @@ interface WindowProps {
 }
 
 // tslint:disable-next-line: typedef
-export function withWindowWidth<T extends WindowProps>(WrappedComponent: React.ComponentType<T>) {
+export function withWindowWidth<T extends WindowProps>(WrappedComponent: React.ComponentType<T> | React.FC<T>) {
     return class extends React.Component<Subtract<T, WindowProps>> {
         public state = { width: 0 };
 

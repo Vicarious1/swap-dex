@@ -18,7 +18,7 @@ const IEOOrdersPage = lazy(() => import('./pages/ieo_orders'));
 const LaunchpadApp = () => {
     const themeColor = useSelector(getERC20Theme);
     return (
-        <ThemeProvider theme={themeColor}>
+        <ThemeProvider theme={themeColor as any}>
             <GeneralLayoutContainer toolbar={toolbar}>
                 <AdBlockDetector />
                 <Suspense fallback={<PageLoading />}>

@@ -1,7 +1,7 @@
 import React from 'react';
 import Modal from 'react-modal';
 import { connect } from 'react-redux';
-import styled, { css, withTheme } from 'styled-components';
+import styled, { css, useTheme, withTheme } from 'styled-components';
 
 import { getAllCollectibles } from '../../../store/selectors';
 import { Theme, themeBreakPoints } from '../../../themes/commons';
@@ -20,7 +20,6 @@ interface StateProps {
 interface OwnProps {
     isOpen: boolean;
     onClose: () => void;
-    theme: Theme;
 }
 
 type Props = OwnProps & StateProps;
@@ -132,8 +131,9 @@ class SearchModal extends React.Component<Props, State> {
     public state = { ...initialState };
 
     public render = () => {
-        const { isOpen, theme, allCollectibles } = this.props;
+        const { isOpen, allCollectibles } = this.props;
         const { searchText, sortType, filterType } = this.state;
+        const theme=useTheme();
 
         const collectibles = Object.keys(allCollectibles).map(key => allCollectibles[key]);
         const searchResult = filterCollectibleByName(collectibles, searchText);
@@ -208,6 +208,6 @@ const mapStateToProps = (state: StoreState): StateProps => {
     };
 };
 
-const SearchModalContainer = withTheme(connect(mapStateToProps)(SearchModal));
+const SearchModalContainer = connect(mapStateToProps)(SearchModal);
 
 export { SearchModalContainer };

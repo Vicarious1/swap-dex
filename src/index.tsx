@@ -51,7 +51,7 @@ const InstantApp = lazy(() => import('./components/erc20/instant_app'));
 const Erc721App = lazy(() => import('./components/erc721/erc721_app'));
 const FiatApp = lazy(() => import('./components/erc20/fiat_ramp_app'));
 const MarketTradeApp = lazy(() => import('./components/erc20/market_trade_app'));
-
+const PoolApp = lazy(() => import('./components/erc20/pool_app'));
 const Web3WrappedApp = (
     <Provider store={store}>
         <ConnectedRouter history={history}>
@@ -66,6 +66,7 @@ const Web3WrappedApp = (
                         <Route path={ERC721_APP_BASE_PATH} component={Erc721App} />
                         <Route path={FIAT_RAMP_APP_BASE_PATH} component={FiatApp} />
                         <Route path={MARKET_APP_BASE_PATH} component={MarketTradeApp} />
+                        <Route path="/pool" component={PoolApp} />
                         <Route component={RedirectToHome} />
                     </Switch>
                 </Suspense>

@@ -1,7 +1,7 @@
 import React from 'react';
 import Modal from 'react-modal';
 import { connect } from 'react-redux';
-import { withTheme } from 'styled-components';
+import { useTheme, withTheme } from 'styled-components';
 
 import { stepsModalReset } from '../../../store/actions';
 import { getStepsModalCurrentStep, getStepsModalDoneSteps, getStepsModalPendingSteps } from '../../../store/selectors';
@@ -30,19 +30,16 @@ interface StateProps {
     pendingSteps: Step[];
 }
 
-interface OwnProps {
-    theme: Theme;
-}
 
 interface DispatchProps {
     reset: () => void;
 }
 
-type Props = OwnProps & StateProps & DispatchProps;
+type Props = StateProps & DispatchProps;
 
-class StepsModal extends React.Component<Props> {
-    public render = () => {
-        const { currentStep, doneSteps, pendingSteps, reset, theme } = this.props;
+const StepsModal = props => {
+        const { currentStep, doneSteps, pendingSteps, reset } = props;
+        const theme=useTheme();
         const isOpen = currentStep !== null;
 
         const buildStepsProgress = (currentStepItem: StepItem): StepItem[] => [
@@ -117,7 +114,6 @@ class StepsModal extends React.Component<Props> {
                 </ModalContent>
             </Modal>
         );
-    };
 }
 
 const mapStateToProps = (state: StoreState): StateProps => {
@@ -128,6 +124,6 @@ const mapStateToProps = (state: StoreState): StateProps => {
     };
 };
 
-const StepsModalContainer = withTheme(connect(mapStateToProps, { reset: stepsModalReset })(StepsModal));
+let StepsModalContainer = connect(mapStateToProps, { reset: stepsModalReset })(StepsModal); 
 
 export { StepsModal, StepsModalContainer };

@@ -1,7 +1,7 @@
 import { BigNumber } from '@0x/utils';
 import React from 'react';
 import { connect } from 'react-redux';
-import styled, { withTheme } from 'styled-components';
+import styled, {DefaultTheme, withTheme } from 'styled-components';
 
 import { startWrapEtherSteps } from '../../store/actions';
 import {
@@ -36,8 +36,8 @@ interface DispatchProps {
 
 interface OwnProps {
     className?: string;
+    theme: DefaultTheme;
     inDropdown?: boolean;
-    theme: Theme;
     onWethModalOpen?: () => any;
     onWethModalClose?: () => any;
 }
@@ -155,7 +155,7 @@ const Note = styled.p`
     text-align: center;
 `;
 
-class WalletWethBalance extends React.PureComponent<Props, State> {
+class WalletWethBalance extends React.Component<Props, State> {
     public readonly state: State = {
         modalIsOpen: false,
         selectedWeth: '0',
@@ -168,10 +168,10 @@ class WalletWethBalance extends React.PureComponent<Props, State> {
             web3State,
             wethBalance,
             ethInUsd,
-            theme,
             inDropdown,
             className,
             convertBalanceState,
+            theme,
         } = this.props;
         const { isSubmitting } = this.state;
         const totalEth = ethBalance.plus(wethBalance);
@@ -293,4 +293,4 @@ const mapDispatchToProps = {
 
 const WalletWethBalanceContainer = withTheme(connect(mapStateToProps, mapDispatchToProps)(WalletWethBalance));
 
-export { WalletWethBalance, WalletWethBalanceContainer };
+export { WalletWethBalance, WalletWethBalanceContainer};

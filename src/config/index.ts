@@ -10,7 +10,7 @@ import configTipBotWhitelistAddresses from './settingsAssetsWhitelistAddresses.j
 // import configFileProduction from '../config/files/config2.json';
 // Using this due to CI error
 
-// import configFileProduction from '../config/files/config.json';
+//import configFileProduction from '../config/files/config.json';
 /*import collectibleCollectionConfig from './collectibles-config.json';
 import configFileIEOProduction from './config-ieo.json';
 import configTemplateFile from './config-template.json';
@@ -19,7 +19,7 @@ import configFileProduction from './config.json';
 import configTipBot from './settingsAssets.json';
 import configTipBotWhitelistAddresses from './settingsAssetsWhitelistAddresses.json';*/
 
-// import configFileTest from './config-test.json';
+//import configFileTest from './config-test.json';
 
 let configFile: any;
 let configFileIEO: any;

@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { connect, useDispatch, useSelector } from 'react-redux';
 import { useLocation } from 'react-router';
-import styled, { withTheme } from 'styled-components';
+import styled, { useTheme, withTheme } from 'styled-components';
 
 import { ERC20_APP_BASE_PATH, UI_GENERAL_TITLE } from '../../../common/constants';
 import { Logo } from '../../../components/common/logo';
@@ -49,7 +49,6 @@ interface DispatchProps {
 }
 
 interface OwnProps {
-    theme: Theme;
     windowWidth: number;
 }
 
@@ -122,6 +121,7 @@ const ToolbarContent = (props: Props) => {
         e.preventDefault();
         props.onGoToHome();
     };
+    const theme=useTheme();
     const [isEnableFiat, setIsEnableFiat] = useState(false);
     const generalConfig = useSelector(getGeneralConfig);
     const marketplace = useSelector(getCurrentMarketPlace);
@@ -157,26 +157,6 @@ const ToolbarContent = (props: Props) => {
         dispatch(changeSwapBaseToken(quoteSwapToken));
     };
 
-    const dropdownHeader =
-        marketplace === MARKETPLACES.MarketTrade ? (
-            <>
-                <SwapDropdownHeader
-                    shouldCloseDropdownBodyOnClick={false}
-                    className={'swap-dropdown'}
-                    isQuote={false}
-                />
-                <SwapStyledButton onClick={onClickSwap}>⇋</SwapStyledButton>
-                <SwapDropdownHeader
-                    shouldCloseDropdownBodyOnClick={false}
-                    className={'swap-dropdown'}
-                    isQuote={true}
-                    horizontalPosition={isMobile(props.windowWidth) ? DropdownPositions.Center : DropdownPositions.Left}
-                />
-            </>
-        ) : (
-            <MarketsDropdownHeader shouldCloseDropdownBodyOnClick={false} className={'markets-dropdown'} />
-        );
-
     let startContent;
     let endOptContent;
     if (isMobile(props.windowWidth)) {
@@ -185,7 +165,6 @@ const ToolbarContent = (props: Props) => {
                 <MenuStyledButton onClick={setOpenSideBar}>
                     <StyledMenuBurguer />
                 </MenuStyledButton>
-                {dropdownHeader}
             </>
         );
     } else {
@@ -195,10 +174,10 @@ const ToolbarContent = (props: Props) => {
                     image={logo}
                     onClick={handleLogoClick}
                     text={(generalConfig && generalConfig.title) || UI_GENERAL_TITLE}
-                    textColor={props.theme.componentsTheme.logoERC20TextColor}
+                    textColor={theme.componentsTheme.logoERC20TextColor}
                 />
-                {!isHome && dropdownHeader}
-                {/* <MyWalletLink href="/market-trade" onClick={handleMarketTradeClick} className={'market-trade'}>
+                {!isHome}
+                {/* <MyWalletLink href="/swap" onClick={handleMarketTradeClick} className={'market-trade'}>
                    Market Trade
                 </MyWalletLink>*/}
             </>
@@ -232,7 +211,7 @@ const ToolbarContent = (props: Props) => {
                 <StyledLink href="/defi" onClick={handleDefiClick} className={'defi'}>
                     DeFi
                 </StyledLink>
-                <StyledLink href="/market-trade" onClick={handleMarketTradeClick} className={'market-trade'}>
+                <StyledLink href="/swap" onClick={handleMarketTradeClick} className={'market-trade'}>
                     Swap
                 </StyledLink>
                 <SettingsDropdownContainer className={'settings-dropdown'} />
@@ -272,6 +251,6 @@ const mapDispatchToProps = (dispatch: any): DispatchProps => {
     };
 };
 
-const ToolbarContentContainer = withWindowWidth(withTheme(connect(null, mapDispatchToProps)(ToolbarContent)));
+const ToolbarContentContainer = withWindowWidth(connect(null, mapDispatchToProps)(ToolbarContent));
 
 export { ToolbarContent, ToolbarContentContainer as default };

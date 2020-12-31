@@ -13,17 +13,18 @@ import ToolbarContentContainer from './common/toolbar_content';
 
 const toolbar = <ToolbarContentContainer />;
 
-const MarketTrade = lazy(() => import('./pages/market_trade'));
+const Swap = lazy(() => import('./pages/swap'));
 
-const MarketTradeApp = () => {
+
+const SwapApp = () => {
     const themeColor = useSelector(getERC20Theme);
     return (
-        <ThemeProvider theme={themeColor}>
+        <ThemeProvider theme={themeColor as any}>
             <GeneralLayoutContainer toolbar={toolbar}>
                 <AdBlockDetector />
                 <Switch>
                     <Suspense fallback={<PageLoading />}>
-                        <Route exact={true} path={`${MARKET_APP_BASE_PATH}/`} component={MarketTrade} />
+                        <Route exact={true} path={`${MARKET_APP_BASE_PATH}/`} component={Swap} />
                     </Suspense>
                 </Switch>
             </GeneralLayoutContainer>
@@ -31,4 +32,4 @@ const MarketTradeApp = () => {
     );
 };
 
-export { MarketTradeApp as default };
+export { SwapApp as default };

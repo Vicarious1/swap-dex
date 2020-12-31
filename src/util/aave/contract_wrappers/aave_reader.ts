@@ -2,12 +2,8 @@
 // tslint:disable:whitespace no-unbound-method no-trailing-whitespace
 // tslint:disable:no-unused-variable
 import {
-    AwaitTransactionSuccessOpts,
     ContractFunctionObj,
-    ContractTxFunctionObj,
-    SendTransactionOpts,
     BaseContract,
-    PromiseWithTransactionHash,
     methodAbiToFunctionSignature,
 } from '@0x/base-contract';
 import { schemas } from '@0x/json-schemas';
@@ -97,9 +93,8 @@ export class AaveReaderContract extends BaseContract {
             BaseContract._bigNumberToString,
         );
         // @ts-ignore
-        const iface = new ethers.utils.Interface(abi);
-        const deployInfo = iface.deployFunction;
-        const txData = deployInfo.encode(bytecode, [_lendingPoolAddressProvider]);
+        const iface = new ethers.utils.Interface(abi,bytecode);
+        const txData = iface.encodeDeploy([_lendingPoolAddressProvider]);
         const web3Wrapper = new Web3Wrapper(provider);
         const txDataWithDefaults = await BaseContract._applyDefaultsToContractTxDataAsync(
             {

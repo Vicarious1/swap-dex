@@ -16,7 +16,7 @@ import { withWindowWidth } from '../../common/hoc/withWindowWidth';
 import { ChevronDownIcon } from '../../common/icons/chevron_down_icon';
 import { MagnifierIcon } from '../../common/icons/magnifier_icon';
 import { TokenIcon } from '../../common/icons/token_icon';
-import { CustomTDFirst, Table, TBody, THead, THFirst, TR } from '../../common/table';
+import { CustomTDFirst, Table, TBody, THead, TableTDProps, TR } from '../../common/table';
 
 interface PropsDivElement extends HTMLAttributes<HTMLDivElement> {}
 
@@ -152,7 +152,7 @@ const tableHeaderFontWeight = `
     font-weight: 700;
 `;
 
-const TRStyled = styled(TR)<MarketRowProps>`
+const TRStyled = styled.tr<MarketRowProps>`
     background-color: ${props => (props.active ? props.theme.componentsTheme.rowActive : 'transparent')};
     cursor: ${props => (props.active ? 'default' : 'pointer')};
 
@@ -168,16 +168,50 @@ const TRStyled = styled(TR)<MarketRowProps>`
 `;
 
 // Has a special left-padding: needs a specific selector to override the theme
-const THFirstStyled = styled(THFirst)`
-    ${verticalCellPadding}
-    ${tableHeaderFontWeight}
-
+const THFirstStyled = styled.th<TableTDProps>`
+    border-bottom: ${props =>
+    props.styles && props.styles.borderBottom
+        ? `1px solid ${props.theme.componentsTheme.tableBorderColor}`
+        : 'none'};
+    border-top: ${props =>
+    props.styles && props.styles.borderTop ? `1px solid ${props.theme.componentsTheme.tableBorderColor}` : 'none'};
+    color: ${props => (props.styles && props.styles.color ? props.styles.color : props.theme.componentsTheme.thColor)};
+    font-size: ${props =>
+    props.styles && props.styles.fontSize ? props.styles.fontSize : props.theme.componentsTheme.thFontSize};
+    font-weight: 500;
+    letter-spacing: 0.5px;
+    line-height: 1.2;
+    padding: 0 ${themeDimensions.horizontalPadding} 5px 0;
+    text-align: ${props =>
+    props.styles && props.styles.textAlign && props.styles.textAlign.length ? props.styles.textAlign : 'left'};
+    text-transform: ${props => (props.styles && props.styles.textTransform ? props.styles.textTransform : 'uppercase')};
+    white-space: nowrap;
     &, &:last-child {
         padding-left: 21.6px;
     }
 `;
 
-const CustomTDFirstStyled = styled(CustomTDFirst)`
+const CustomTDFirstStyled = styled.td<TableTDProps>`
+    border-bottom: ${props =>
+        props.styles && props.styles.borderBottom
+            ? `1px solid ${props.theme.componentsTheme.tableBorderColor}`
+            : 'none'};
+    border-top: ${props =>
+        props.styles && props.styles.borderTop ? `1px solid ${props.theme.componentsTheme.tableBorderColor}` : 'none'};
+    color: ${props => (props.styles && props.styles.color ? props.styles.color : props.theme.componentsTheme.tdColor)};
+    font-feature-settings: 'tnum' ${props => (props.styles && props.styles.tabular ? '1' : '0')};
+    font-size: ${props =>
+        props.styles && props.styles.fontSize ? props.styles.fontSize : props.theme.componentsTheme.tdFontSize};
+    font-weight: ${props => (props.styles && props.styles.fontWeight ? props.styles.fontWeight : 'normal')};
+    line-height: ${props => (props.styles && props.styles.lineWeight ? props.styles.lineWeight : '1.2')};
+    padding: 5px ${themeDimensions.horizontalPadding} 5px 0;
+    text-align: ${props =>
+        props.styles && props.styles.textAlign && props.styles.textAlign.length ? props.styles.textAlign : 'left'};
+
+    &,
+    &:last-child {
+        padding-left: ${themeDimensions.horizontalPadding};
+    }
     ${verticalCellPadding};
 `;
 

@@ -42,8 +42,8 @@ export const generateERC20MarketTradeLink = (address: string, domain = defaultDo
     const knownTokens = getKnownTokens();
     try {
         const token = knownTokens.getTokenByAddress(address);
-        return `https://${domain}/#/market-trade?token=${token.symbol}`;
+        return `https://${domain}/#/swap?token=${token.symbol}`;
     } catch {
-        return `https://${domain}/#/market-trade?token=${address}`;
+        return `https://${domain}/#/swap?token=${address}`;
     }
 };

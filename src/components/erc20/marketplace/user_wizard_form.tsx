@@ -19,12 +19,6 @@ import { MarketFiltersForm } from './wizard_form/marketFilters_form';
 import { PairsForm } from './wizard_form/pairs_form';
 import { TokensForm } from './wizard_form/tokens_form';
 
-interface OwnProps {
-    theme: Theme;
-}
-
-type Props = OwnProps;
-
 const Content = styled.div`
     display: flex;
     flex-direction: column;
@@ -53,7 +47,7 @@ const Introduction = styled.p`
     color: ${props => props.theme.componentsTheme.textColorCommon};
 `;
 
-const UserWizardForm = (_props: Props) => {
+const UserWizardForm = (_props) => {
     const configTemplate = Config.getConfig();
     const dispatch = useDispatch();
     const steps: Step[] = [
@@ -278,6 +272,6 @@ const UserWizardForm = (_props: Props) => {
     );
 };
 
-const UserWizardFormWithTheme = withTheme(UserWizardForm);
+const UserWizardFormWithTheme = UserWizardForm;
 
 export { UserWizardForm, UserWizardFormWithTheme };

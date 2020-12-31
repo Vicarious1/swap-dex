@@ -38,24 +38,12 @@ import { CardTabSelector } from '../common/card_tab_selector';
 import { useWindowSize } from '../common/hooks/window_size_hook';
 import { TokenIcon } from '../common/icons/token_icon';
 import { LoadingWrapper } from '../common/loading';
-import { CustomTD, Table, TH, THead, THLast, TR } from '../common/table';
+import { CustomTDMobile,CustomTDTokenName,TokenTD, CustomTD, Table, TH, THStyled, THead, THLast, TR } from '../common/table';
 import { ZeroXInstantWidget } from '../erc20/common/0xinstant_widget';
 
 import { DefiBorrowTokenModal } from './wallet_defi_borrow_token_modal';
 import { DefiRepayTokenModal } from './wallet_defi_repay_token_modal';
 
-const THStyled = styled(TH)`
-    &:first-child {
-        padding-right: 0;
-    }
-`;
-
-const TokenTD = styled(CustomTD)`
-    padding-bottom: 10px;
-    padding-right: 0;
-    padding-top: 10px;
-    width: 40px;
-`;
 
 const BuyETHButton = styled(Button)`
     margin-left: 5px;
@@ -65,9 +53,7 @@ const TokenIconStyled = styled(TokenIcon)`
     margin: 0 auto 0 0;
 `;
 
-const CustomTDTokenName = styled(CustomTD)`
-    white-space: nowrap;
-`;
+
 
 const TokenEtherscanLink = styled.a`
     align-items: center;
@@ -121,10 +107,6 @@ const PStyled = styled.p`
     color: ${props => props.theme.componentsTheme.textColorCommon};
 `;
 
-const CustomTDMobile = styled(CustomTD)`
-    max-width: 30px;
-    display: block;
-`;
 
 const WalletDefiBorrowCard = styled(CardBase)``;
 
@@ -168,7 +150,7 @@ export const WalletDefiBorrowBalances = () => {
     const [isSubmittingState, setIsSubmittingState] = useState(false);
     const [aTokenDataState, setATokenDataState] = useState<ATokenData>();
     const [isBorrowState, setIsBorrowState] = useState(true);
-    const [tokenBalanceState, setTokenBalanceState] = useState();
+    const [tokenBalanceState, setTokenBalanceState] = useState<TokenBalance>();
     const [availableForBorrowState, setAvailableForBorrowState] = useState(new BigNumber(0));
     const [borrowBalanceState, setBorrowBalanceState] = useState(new BigNumber(0));
 
@@ -294,7 +276,7 @@ export const WalletDefiBorrowBalances = () => {
                 setIsModalBorrowOpenState(true);
                 if (isEthToken) {
                     setIsEthState(true);
-                    setTokenBalanceState({ ...wethTokenBalance, balance: tokB });
+                    setTokenBalanceState({ ...wethTokenBalance as TokenBalance, balance: tokB });
                 } else {
                     setIsEthState(false);
                     setTokenBalanceState(tokenBalances.find(tb => tb.token === token));
@@ -307,7 +289,7 @@ export const WalletDefiBorrowBalances = () => {
                 setATokenDataState(tokenD);
                 if (isEthToken) {
                     setIsEthState(true);
-                    setTokenBalanceState({ ...wethTokenBalance, balance: tokB });
+                    setTokenBalanceState({ ...wethTokenBalance as TokenBalance, balance: tokB });
                 } else {
                     setIsEthState(false);
                     setTokenBalanceState(tokenBalances.find(tb => tb.token === token));
@@ -460,7 +442,7 @@ export const WalletDefiBorrowBalances = () => {
                 {isModalBorrowOpenState && aTokenDataState && (
                     <DefiBorrowTokenModal
                         isOpen={isModalBorrowOpenState}
-                        tokenBalance={tokenBalanceState}
+                        tokenBalance={tokenBalanceState as TokenBalance}
                         isSubmitting={isSubmittingState}
                         availableForBorrow={availableForBorrowState}
                         onSubmit={handleSubmit}
@@ -475,7 +457,7 @@ export const WalletDefiBorrowBalances = () => {
                 {isModalRepayOpenState && aTokenDataState && (
                     <DefiRepayTokenModal
                         isOpen={isModalRepayOpenState}
-                        tokenBalance={tokenBalanceState}
+                        tokenBalance={tokenBalanceState as TokenBalance}
                         isSubmitting={isSubmittingState}
                         onSubmit={handleSubmit}
                         borrowedBalance={borrowBalanceState}

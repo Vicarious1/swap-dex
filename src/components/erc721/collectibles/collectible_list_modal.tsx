@@ -1,7 +1,7 @@
 import React from 'react';
 import Modal from 'react-modal';
 import { connect } from 'react-redux';
-import styled, { withTheme } from 'styled-components';
+import styled, { useTheme, withTheme } from 'styled-components';
 
 import { selectCollectible } from '../../../store/collectibles/actions';
 import { getUserCollectiblesAvailableToSell } from '../../../store/selectors';
@@ -23,7 +23,6 @@ interface DispatchProps {
 }
 
 interface OwnProps {
-    theme: Theme;
     isOpen: boolean;
     onModalCloseRequest: () => any;
 }
@@ -94,7 +93,8 @@ class CollectibleListModalContainer extends React.PureComponent<Props, State> {
     };
 
     public render = () => {
-        const { theme, isOpen, userCollectibles } = this.props;
+        const {isOpen, userCollectibles } = this.props;
+        const theme=useTheme();
         const collectibles = Object.keys(userCollectibles).map(key => userCollectibles[key]);
         const { filterText } = this.state;
         const filteredCollectibles = filterCollectibleByName(collectibles, filterText);
@@ -147,6 +147,6 @@ const mapDispatchToProps = (dispatch: any): DispatchProps => {
     };
 };
 
-const CollectibleListModal = withTheme(connect(mapStateToProps, mapDispatchToProps)(CollectibleListModalContainer));
+const CollectibleListModal = connect(mapStateToProps, mapDispatchToProps)(CollectibleListModalContainer);
 
 export { CollectibleListModal };

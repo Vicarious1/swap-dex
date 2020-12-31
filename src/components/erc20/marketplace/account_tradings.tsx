@@ -49,7 +49,7 @@ const AccountEtherscanLink = styled.a`
     }
 `;
 
-export const ClicableTD = styled(CustomTD)`
+export const ClicableTD = styled(CustomTD as any)`
     cursor: pointer;
 `;
 

@@ -26,7 +26,7 @@ const GeneralLayoutERC721 = styled(GeneralLayoutContainer)`
 const Erc721App = () => {
     const themeColor = getThemeByMarketplace(MARKETPLACES.ERC721);
     return (
-        <ThemeProvider theme={themeColor}>
+        <ThemeProvider theme={themeColor as any}>
             <GeneralLayoutERC721 toolbar={toolbar}>
                 <AdBlockDetector />
                 <CollectibleSellModal />

@@ -1,7 +1,7 @@
 import { BigNumber } from '@0x/utils';
 import React from 'react';
 import { connect } from 'react-redux';
-import styled, { withTheme } from 'styled-components';
+import styled, { useTheme, withTheme } from 'styled-components';
 
 import { METAMASK_EXTENSION_URL } from '../../../common/constants';
 import { initWallet, openFiatOnRampModal, setWeb3State } from '../../../store/actions';
@@ -152,11 +152,7 @@ interface DispatchProps {
     onClickOpenFiatOnRampModal: () => any;
 }
 
-interface OwnProps {
-    theme: Theme;
-}
-
-type Props = StateProps & DispatchProps & OwnProps;
+type Props = StateProps & DispatchProps;
 
 interface State {
     modalBuyEthIsOpen: boolean;
@@ -218,6 +214,7 @@ class IEOWalletBalance extends React.Component<Props, State> {
     public readonly state: State = {
         modalBuyEthIsOpen: false,
     };
+   
 
     public render = () => {
         const { web3State, wallet } = this.props;
@@ -247,6 +244,8 @@ class IEOWalletBalance extends React.Component<Props, State> {
             ethAccount,
             // onClickOpenFiatOnRampModal,
         } = this.props;
+
+        const theme=useTheme();
 
         if (baseTokenBalance && quoteTokenBalance) {
             const quoteToken = quoteTokenBalance.token;
@@ -425,6 +424,6 @@ const mapDispatchToProps = (dispatch: any) => {
     };
 };
 
-const IEOWalletBalanceContainer = withTheme(connect(mapStateToProps, mapDispatchToProps)(IEOWalletBalance));
+const IEOWalletBalanceContainer = connect(mapStateToProps, mapDispatchToProps)(IEOWalletBalance);
 
 export { IEOWalletBalance, IEOWalletBalanceContainer };

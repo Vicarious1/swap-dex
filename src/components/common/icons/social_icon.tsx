@@ -34,12 +34,12 @@ const SocialIconContainer = (props: Props) => {
     };
 
     return (
-        <IconContainer color={color} onClick={openSocial} {...restProps}>
+        <IconContainer color={color} onClick={openSocial}>
             {Icon}
         </IconContainer>
     );
 };
 
-const SocialIcon = withTheme(SocialIconContainer);
+const SocialIcon = withTheme(SocialIconContainer as any);
 
 export { SocialIcon };

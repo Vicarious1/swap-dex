@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import Modal from 'react-modal';
 import { useDispatch, useSelector } from 'react-redux';
-import styled, { withTheme } from 'styled-components';
+import styled, { useTheme, withTheme } from 'styled-components';
 
 import { COINDIRECT_MERCHANT_ID, MOONPAY_API_KEY, WYRE_ID } from '../../common/constants';
 import { postMoonpaySignature } from '../../services/relayer';
@@ -62,8 +62,8 @@ const ApplePayLink = styled.a`
     }
 `;
 
-export const FiatOnRampModal: React.FC<Props> = props => {
-    const { theme } = props;
+export const FiatOnRampModal: React.FC<{}> = props => {
+    const theme = useTheme();
     const dispatch = useDispatch();
     const size = useWindowSize();
     const ethAccount = useSelector(getEthAccount);
@@ -173,4 +173,4 @@ export const FiatOnRampModal: React.FC<Props> = props => {
     );
 };
 
-export const FiatOnRampModalContainer = withTheme(FiatOnRampModal);
+export const FiatOnRampModalContainer = FiatOnRampModal;

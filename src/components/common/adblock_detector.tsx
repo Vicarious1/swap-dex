@@ -111,6 +111,6 @@ class AdBlockDetectorContainer extends React.Component<Props, State> {
     };
 }
 
-const AdBlockDetector = withTheme(AdBlockDetectorContainer);
+const AdBlockDetector = withTheme(AdBlockDetectorContainer as any);
 
 export { AdBlockDetector };

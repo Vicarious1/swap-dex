@@ -36,23 +36,10 @@ import { CardTabSelector } from '../common/card_tab_selector';
 import { useWindowSize } from '../common/hooks/window_size_hook';
 import { TokenIcon } from '../common/icons/token_icon';
 import { LoadingWrapper } from '../common/loading';
-import { CustomTD, Table, TH, THead, THLast, TR } from '../common/table';
+import { CustomTD, Table, TH, THStyled, CustomTDMobile, CustomTDTokenName, TokenTD, THead, THLast, TR } from '../common/table';
 import { ZeroXInstantWidget } from '../erc20/common/0xinstant_widget';
 
 import { DefiLendingTokenModal } from './wallet_defi_lending_token_modal';
-
-const THStyled = styled(TH)`
-    &:first-child {
-        padding-right: 0;
-    }
-`;
-
-const TokenTD = styled(CustomTD)`
-    padding-bottom: 10px;
-    padding-right: 0;
-    padding-top: 10px;
-    width: 40px;
-`;
 
 const BuyETHButton = styled(Button)`
     margin-left: 5px;
@@ -62,9 +49,6 @@ const TokenIconStyled = styled(TokenIcon)`
     margin: 0 auto 0 0;
 `;
 
-const CustomTDTokenName = styled(CustomTD)`
-    white-space: nowrap;
-`;
 
 const TokenEtherscanLink = styled.a`
     align-items: center;
@@ -118,11 +102,6 @@ const PStyled = styled.p`
     color: ${props => props.theme.componentsTheme.textColorCommon};
 `;
 
-const CustomTDMobile = styled(CustomTD)`
-    max-width: 30px;
-    display: block;
-`;
-
 const WalletDefiLendingCard = styled(CardBase)``;
 
 const Settings = styled.div`
@@ -164,7 +143,7 @@ export const WalletDefiLendingBalances = () => {
     const [isSubmittingState, setIsSubmittingState] = useState(false);
     const [aTokenDataState, setATokenDataState] = useState<ATokenData>();
     const [isLendingState, setIsLendingState] = useState(true);
-    const [tokenBalanceState, setTokenBalanceState] = useState();
+    const [tokenBalanceState, setTokenBalanceState] = useState<TokenBalance>();
 
     const dispatch = useDispatch();
     const windowSize = useWindowSize();
@@ -265,7 +244,7 @@ export const WalletDefiLendingBalances = () => {
                 setIsModalOpenState(true);
                 if (isEthToken) {
                     setIsEthState(true);
-                    setTokenBalanceState({ ...wethTokenBalance, balance: tokB });
+                    setTokenBalanceState({ ...wethTokenBalance as TokenBalance, balance: tokB });
                 } else {
                     setIsEthState(false);
                     setTokenBalanceState(tokenBalances.find(tb => tb.token === token));
@@ -277,7 +256,7 @@ export const WalletDefiLendingBalances = () => {
                 setATokenDataState(tokenD);
                 if (isEthToken) {
                     setIsEthState(true);
-                    setTokenBalanceState({ ...wethTokenBalance, balance: tokB });
+                    setTokenBalanceState({ ...wethTokenBalance  as TokenBalance, balance: tokB });
                 } else {
                     setIsEthState(false);
                     setTokenBalanceState(tokenBalances.find(tb => tb.token === token));
@@ -563,7 +542,7 @@ export const WalletDefiLendingBalances = () => {
                     {isModalOpenState && aTokenDataState && (
                         <DefiLendingTokenModal
                             isOpen={isModalOpenState}
-                            tokenBalance={tokenBalanceState}
+                            tokenBalance={tokenBalanceState as TokenBalance}
                             isSubmitting={isSubmittingState}
                             onSubmit={handleSubmit}
                             aToken={aTokenDataState}
@@ -622,7 +601,7 @@ export const WalletDefiLendingBalances = () => {
                     {isModalOpenState && aTokenDataState && (
                         <DefiLendingTokenModal
                             isOpen={isModalOpenState}
-                            tokenBalance={tokenBalanceState}
+                            tokenBalance={tokenBalanceState as TokenBalance}
                             isSubmitting={isSubmittingState}
                             onSubmit={handleSubmit}
                             aToken={aTokenDataState}

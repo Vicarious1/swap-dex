@@ -166,7 +166,7 @@ const verticalCellPadding = `
 const tableHeaderFontWeight = `
 `;
 
-const TRStyled = styled(TR)<MarketRowProps>`
+const TRStyled = styled.tr<MarketRowProps>`
     background-color: ${props => (props.active ? props.theme.componentsTheme.rowActive : 'transparent')};
     cursor: ${props => (props.active ? 'default' : 'pointer')};
 
@@ -182,7 +182,7 @@ const TRStyled = styled(TR)<MarketRowProps>`
 `;
 
 // Has a special left-padding: needs a specific selector to override the theme
-const THFirstStyled = styled(THFirst)`
+const THFirstStyled = styled(THFirst  as any)`
     ${verticalCellPadding}
     ${tableHeaderFontWeight}
     font-size: ${props => props.theme.componentsTheme.marketStatsTHFontSize};
@@ -191,19 +191,19 @@ const THFirstStyled = styled(THFirst)`
     }
 `;
 
-const THLastStyled = styled(THLast)`
+const THLastStyled = styled(THLast as any)`
     ${verticalCellPadding};
     ${tableHeaderFontWeight}
     font-size: ${props => props.theme.componentsTheme.marketStatsTHFontSize};
 `;
 
-const CustomTDFirstStyled = styled(CustomTD)`
+const CustomTDFirstStyled = styled(CustomTD  as any)`
     ${verticalCellPadding};
     padding-left: 0px;
     font-size: ${props => props.theme.componentsTheme.marketStatsTDFontSize};
 `;
 
-const CustomTDLastStyled = styled(CustomTDLast)`
+const CustomTDLastStyled = styled(CustomTDLast  as any)`
     ${verticalCellPadding};
     font-size: ${props => props.theme.componentsTheme.marketStatsTDFontSize};
 `;

@@ -20,7 +20,8 @@ import { getThemeFromConfigDex } from '../../../themes/theme_meta_data_utils';
 import { connectToExplorer } from '../../../util/external_services';
 import { truncateAddress } from '../../../util/number_utils';
 import { viewAddressOnEtherscan } from '../../../util/transaction_link';
-import { WalletConnectionStatusDotStyled, WalletConnectionStatusText } from '../../account/wallet_connection_status';
+import { WalletConnectionStatusDotStyled } from '../../account/wallet_connections_status_dot';
+import { WalletConnectionStatusText } from '../../account/wallet_connection_status';
 import { TransakWidget } from '../common/transak_widget';
 
 const ListContainer = styled.ul`
@@ -35,7 +36,7 @@ const ListItem = styled.li`
     cursor: pointer;
 `;
 
-const ListItemFlex = styled(ListItem)`
+const ListItemFlex =  styled.li`
     color: ${props => props.theme.componentsTheme.textColorCommon};
     padding: 16px;
     cursor: pointer;

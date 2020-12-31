@@ -1,85 +1,71 @@
-import { ConnectedRouter } from 'connected-react-router';
-import React, { lazy, Suspense } from 'react';
-import ReactDOM from 'react-dom';
-// import ReactGA from 'react-ga';
-import ReactModal from 'react-modal';
-import { Provider } from 'react-redux';
-import { Redirect, Route, Switch } from 'react-router';
-import 'sanitize.css';
+import { createWeb3ReactRoot, Web3ReactProvider } from '@web3-react/core'
+import 'inter-ui'
+import React, { StrictMode } from 'react'
+import { isMobile } from 'react-device-detect'
+import ReactDOM from 'react-dom'
+import ReactGA from 'react-ga'
+import { Provider } from 'react-redux'
+import { NetworkContextName } from './constants'
+import './i18n'
+import App from './pages/App'
+import store from './state'
+import ApplicationUpdater from './state/application/updater'
+import ListsUpdater from './state/lists/updater'
+import MulticallUpdater from './state/multicall/updater'
+import TransactionUpdater from './state/transactions/updater'
+import UserUpdater from './state/user/updater'
+import ThemeProvider, { FixedGlobalStyle, ThemedGlobalStyle } from './theme'
+import getLibrary from './utils/getLibrary'
 
-import {
-    DEFAULT_BASE_PATH,
-    DEFI_APP_BASE_PATH,
-    ERC20_APP_BASE_PATH,
-    ERC721_APP_BASE_PATH,
-    FIAT_RAMP_APP_BASE_PATH,
-    INSTANT_APP_BASE_PATH,
-    LAUNCHPAD_APP_BASE_PATH,
-    LOGGER_ID,
-    MARGIN_APP_BASE_PATH,
-    MARKET_APP_BASE_PATH,
-} from './common/constants';
-import { AppContainer } from './components/app';
-import { PageLoading } from './components/common/page_loading';
-import './index.css';
-import * as serviceWorker from './serviceWorker';
-import { history, store } from './store';
-import { envUtil } from './util/env';
-/*import Erc20App from './components/erc20/erc20_app';
-import LaunchpadApp from './components/erc20/launchpad_app';
-import MarginApp from './components/erc20/margin_app';*/
+const Web3ProviderNetwork = createWeb3ReactRoot(NetworkContextName)
 
-// Adding analytics -- Switch not collects user data
-/*ReactGA.initialize(process.env.REACT_APP_ANALYTICS || '');
-
-history.listen(his => {
-    ReactGA.pageview(his.pathname + his.search);
-});*/
-
-ReactModal.setAppElement('#root');
-
-if (['development', 'production'].includes(process.env.NODE_ENV) && !window.localStorage.debug) {
-    // Log only the app constant id to the console
-    window.localStorage.debug = `${LOGGER_ID}*`;
+if ('ethereum' in window) {
+  ;(window.ethereum as any).autoRefreshOnNetworkChange = false
 }
-const RedirectToHome = () => <Redirect to={DEFAULT_BASE_PATH} />;
 
-const Erc20App = lazy(() => import('./components/erc20/erc20_app'));
-const LaunchpadApp = lazy(() => import('./components/erc20/launchpad_app'));
-const MarginApp = lazy(() => import('./components/erc20/margin_app'));
-const InstantApp = lazy(() => import('./components/erc20/instant_app'));
-const Erc721App = lazy(() => import('./components/erc721/erc721_app'));
-const FiatApp = lazy(() => import('./components/erc20/fiat_ramp_app'));
-const MarketTradeApp = lazy(() => import('./components/erc20/market_trade_app'));
-const PoolApp = lazy(() => import('./components/erc20/pool_app'));
-const Web3WrappedApp = (
-    <Provider store={store}>
-        <ConnectedRouter history={history}>
-            <AppContainer>
-                <Suspense fallback={<PageLoading />}>
-                    <Switch>
-                        <Route path={ERC20_APP_BASE_PATH} component={Erc20App} />
-                        <Route path={LAUNCHPAD_APP_BASE_PATH} component={LaunchpadApp} />
-                        <Route path={MARGIN_APP_BASE_PATH} component={MarginApp} />
-                        <Route path={DEFI_APP_BASE_PATH} component={MarginApp} />
-                        <Route path={INSTANT_APP_BASE_PATH} component={InstantApp} />
-                        <Route path={ERC721_APP_BASE_PATH} component={Erc721App} />
-                        <Route path={FIAT_RAMP_APP_BASE_PATH} component={FiatApp} />
-                        <Route path={MARKET_APP_BASE_PATH} component={MarketTradeApp} />
-                        <Route path="/pool" component={PoolApp} />
-                        <Route component={RedirectToHome} />
-                    </Switch>
-                </Suspense>
-            </AppContainer>
-        </ConnectedRouter>
-    </Provider>
-);
-
-ReactDOM.render(Web3WrappedApp, document.getElementById('root'));
-
-// If you want your app to work offline and load faster, you can change
-// unregister() to register() below. Note this comes with some pitfalls.
-// Learn more about service workers: http://bit.ly/CRA-PWA
-if (!envUtil.isMobileOperatingSystem()) {
-    serviceWorker.register();
+const GOOGLE_ANALYTICS_ID: string | undefined = process.env.REACT_APP_GOOGLE_ANALYTICS_ID
+if (typeof GOOGLE_ANALYTICS_ID === 'string') {
+  ReactGA.initialize(GOOGLE_ANALYTICS_ID)
+  ReactGA.set({
+    customBrowserType: !isMobile ? 'desktop' : 'web3' in window || 'ethereum' in window ? 'mobileWeb3' : 'mobileRegular'
+  })
+} else {
+  ReactGA.initialize('test', { testMode: true, debug: true })
 }
+
+window.addEventListener('error', error => {
+  ReactGA.exception({
+    description: `${error.message} @ ${error.filename}:${error.lineno}:${error.colno}`,
+    fatal: true
+  })
+})
+
+function Updaters() {
+  return (
+    <>
+      <ListsUpdater />
+      <UserUpdater />
+      <ApplicationUpdater />
+      <TransactionUpdater />
+      <MulticallUpdater />
+    </>
+  )
+}
+
+ReactDOM.render(
+  <StrictMode>
+    <FixedGlobalStyle />
+    <Web3ReactProvider getLibrary={getLibrary}>
+      <Web3ProviderNetwork getLibrary={getLibrary}>
+        <Provider store={store}>
+          <Updaters />
+          <ThemeProvider>
+            <ThemedGlobalStyle />
+            <App />
+          </ThemeProvider>
+        </Provider>
+      </Web3ProviderNetwork>
+    </Web3ReactProvider>
+  </StrictMode>,
+  document.getElementById('root')
+)

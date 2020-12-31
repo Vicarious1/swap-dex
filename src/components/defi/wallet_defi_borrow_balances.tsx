@@ -220,9 +220,11 @@ export const WalletDefiBorrowBalances = () => {
                 }
             }
 
-            const tokB = isEthToken
+
+            const bal = isEthToken
                 ? ethTotalBalance || new BigNumber(0)
                 : (tokenBalance && tokenBalance.balance) || new BigNumber(0);
+            const tokB = bal as BigNumber;
             let displayAvailableForBorrowBalance;
             let displayBorrowedBalance;
             let availableForBorrow = new BigNumber(0);

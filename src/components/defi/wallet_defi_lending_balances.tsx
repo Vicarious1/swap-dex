@@ -155,7 +155,7 @@ export const WalletDefiLendingBalances = () => {
     const tokensPrice = useSelector(getTokensPrice);
     const tokenBalances = useSelector(getTokenBalances);
     const ethBalance = useSelector(getEthBalance);
-    const ethTotalBalance = useSelector(getTotalEthBalance);
+    const ethTotalBalance = useSelector(getTotalEthBalance) as BigNumber;
     const aaveLoadingState = useSelector(getAaveLoadingState);
     const currencySelector = useSelector(getAaveCurrency);
 

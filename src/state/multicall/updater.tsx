@@ -133,7 +133,7 @@ export default function Updater(): null {
   ])
 
   useEffect(() => {
-    if (!latestBlockNumber || !chainId || !multicallContract) return
+    if (!latestBlockNumber || !chainId || !multicallContract) return;
 
     const outdatedCallKeys: string[] = JSON.parse(serializedOutdatedCallKeys)
     if (outdatedCallKeys.length === 0) return
@@ -142,7 +142,7 @@ export default function Updater(): null {
     const chunkedCalls = chunkArray(calls, CALL_CHUNK_SIZE)
 
     if (cancellations.current?.blockNumber !== latestBlockNumber) {
-      cancellations.current?.cancellations?.forEach(c => c())
+      return cancellations.current?.cancellations?.forEach(c => c())
     }
 
     dispatch(

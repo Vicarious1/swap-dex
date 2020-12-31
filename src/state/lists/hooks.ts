@@ -66,6 +66,7 @@ export function listToTokenMap(list: TokenList): TokenAddressMap {
     },
     { ...EMPTY_LIST }
   )
+  // eslint-disable-next-line @typescript-eslint/no-unused-expressions
   listCache?.set(list, map)
   return map
 }

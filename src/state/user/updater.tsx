@@ -16,16 +16,18 @@ export default function Updater(): null {
     dispatch(updateMatchesDarkMode({ matchesDarkMode: match.matches }))
 
     if (match?.addListener) {
+      // eslint-disable-next-line @typescript-eslint/no-unused-expressions
       match?.addListener(darkHandler)
     } else if (match?.addEventListener) {
+      // eslint-disable-next-line @typescript-eslint/no-unused-expressions
       match?.addEventListener('change', darkHandler)
     }
 
     return () => {
       if (match?.removeListener) {
-        match?.removeListener(darkHandler)
+        return match?.removeListener(darkHandler)
       } else if (match?.removeEventListener) {
-        match?.removeEventListener('change', darkHandler)
+        return match?.removeEventListener('change', darkHandler)
       }
     }
   }, [dispatch])

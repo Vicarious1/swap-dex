@@ -109,7 +109,9 @@ export function theme(darkMode: boolean): DefaultTheme {
     flexRowNoWrap: css`
       display: flex;
       flex-flow: row nowrap;
-    `
+    `,
+    componentsTheme: null,
+    modalTheme: null
   }
 }
 

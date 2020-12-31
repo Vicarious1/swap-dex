@@ -113,7 +113,7 @@ export function CurrencySearch({
     const input = event.target.value
     const checksummedInput = isAddress(input)
     setSearchQuery(checksummedInput || input)
-    fixedList.current?.scrollTo(0)
+    return fixedList.current?.scrollTo(0)
   }, [])
 
   const handleEnter = useCallback(

@@ -23,7 +23,8 @@ import { AppContainer } from './components/app';
 import { PageLoading } from './components/common/page_loading';
 import './index.css';
 import * as serviceWorker from './serviceWorker';
-import { history, store } from './store';
+import { history } from './store';
+import store from './store'
 import { envUtil } from './util/env';
 /*import Erc20App from './components/erc20/erc20_app';
 import LaunchpadApp from './components/erc20/launchpad_app';

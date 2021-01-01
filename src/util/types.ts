@@ -13,6 +13,7 @@ import { ExtraArgument } from '../store/index';
 import { Theme, ThemeProperties } from '../themes/commons';
 
 import { AaveState, ATokenData } from './aave/types';
+import { TokenList } from '@uniswap/token-lists'
 
 export interface TabItem {
     active: boolean;
@@ -28,6 +29,18 @@ export enum Network {
     Rinkeby = 4,
     Kovan = 42,
     Ganache = 50,
+}
+
+export enum BurnField {
+  LIQUIDITY_PERCENT = 'LIQUIDITY_PERCENT',
+  LIQUIDITY = 'LIQUIDITY',
+  CURRENCY_A = 'CURRENCY_A',
+  CURRENCY_B = 'CURRENCY_B'
+}
+
+export enum SwapField {
+  INPUT = 'INPUT',
+  OUTPUT = 'OUTPUT'
 }
 
 export interface Token {
@@ -182,14 +195,6 @@ export interface RelayerState {
     readonly orderExpireTime?: number;
 }
 
-export interface SwapState {
-    readonly baseToken: Token;
-    readonly quoteToken: Token;
-    readonly quote?: MarketBuySwapQuote | MarketSellSwapQuote;
-    readonly isBuy?: boolean;
-    readonly quoteState: SwapQuoteState;
-}
-
 export interface UIState {
     readonly notifications: Notification[];
     readonly fills: Fill[];
@@ -232,6 +237,157 @@ export interface MarketState {
     readonly marketMakerStats: MarketMakerStats[];
 }
 
+export type PopupContent =
+  | {
+      txn: {
+        hash: string
+        success: boolean
+        summary?: string
+      }
+    }
+  | {
+      listUpdate: {
+        listUrl: string
+        oldList: TokenList
+        newList: TokenList
+        auto: boolean
+      }
+    }
+
+type PopupList = Array<{ key: string; show: boolean; content: PopupContent; removeAfterMs: number | null }>
+
+export interface ApplicationState {
+  blockNumber: { [chainId: number]: number }
+  popupList: PopupList
+  walletModalOpen: boolean
+  settingsMenuOpen: boolean
+}
+
+export interface SerializedToken {
+  chainId: number
+  address: string
+  decimals: number
+  symbol?: string
+  name?: string
+}
+
+export interface SerializedPair {
+  token0: SerializedToken
+  token1: SerializedToken
+}
+
+export interface UserState {
+  // the timestamp of the last updateVersion action
+  lastUpdateVersionTimestamp?: number
+
+  userDarkMode: boolean | null // the user's choice for dark mode or light mode
+  matchesDarkMode: boolean // whether the dark mode media query matches
+
+  userExpertMode: boolean
+
+  // user defined slippage tolerance in bips, used in all txns
+  userSlippageTolerance: number
+
+  // deadline set by user in minutes, used in all txns
+  userDeadline: number
+
+  tokens: {
+    [chainId: number]: {
+      [address: string]: SerializedToken
+    }
+  }
+
+  pairs: {
+    [chainId: number]: {
+      // keyed by token0Address:token1Address
+      [key: string]: SerializedPair
+    }
+  }
+
+  timestamp: number
+}
+
+export interface SerializableTransactionReceipt {
+  to: string
+  from: string
+  contractAddress: string
+  transactionIndex: number
+  blockHash: string
+  transactionHash: string
+  blockNumber: number
+  status?: number
+}
+
+export interface TransactionDetails {
+  hash: string
+  approval?: { tokenAddress: string; spender: string }
+  summary?: string
+  receipt?: SerializableTransactionReceipt
+  lastCheckedBlockNumber?: number
+  addedTime: number
+  confirmedTime?: number
+  from: string
+}
+
+export interface TransactionState {
+  [chainId: number]: {
+    [txHash: string]: TransactionDetails
+  }
+}
+
+export enum MintField {
+  CURRENCY_A = 'CURRENCY_A',
+  CURRENCY_B = 'CURRENCY_B'
+}
+
+export interface MintState {
+  readonly independentField: MintField
+  readonly typedValue: string
+  readonly otherTypedValue: string // for the case when there's no liquidity
+}
+
+export interface BurnState {
+  readonly independentField: BurnField
+  readonly typedValue: string
+}
+
+export interface MulticallState {
+  callListeners?: {
+    // on a per-chain basis
+    [chainId: number]: {
+      // stores for each call key the listeners' preferences
+      [callKey: string]: {
+        // stores how many listeners there are per each blocks per fetch preference
+        [blocksPerFetch: number]: number
+      }
+    }
+  }
+
+  callResults: {
+    [chainId: number]: {
+      [callKey: string]: {
+        data?: string | null
+        blockNumber?: number
+        fetchingBlockNumber?: number
+      }
+    }
+  }
+}
+
+export interface ListsState {
+  readonly byUrl: {
+    readonly [url: string]: {
+      readonly current: TokenList | null
+      readonly pendingUpdate: TokenList | null
+      readonly loadingRequestId: string | null
+      readonly error: string | null
+    }
+  }
+  // this contains the default list of lists from the last time the updateVersion was called, i.e. the app was reloaded
+  readonly lastInitializedDefaultListOfLists?: string[]
+  readonly selectedListUrl: string | undefined
+}
+
 export interface StoreState {
     readonly router: RouterState;
     readonly blockchain: BlockchainState;
@@ -240,8 +396,35 @@ export interface StoreState {
     readonly market: MarketState;
     readonly collectibles: CollectiblesState;
     readonly bzx: BZXState;
-    readonly swap: SwapState;
+    readonly swapPage: SwapState;
     readonly aave: AaveState;
+    readonly application: ApplicationState;
+    readonly user: UserState;
+    readonly transactions: TransactionState;
+    readonly swap: SwapState;
+    readonly mint: MintState;
+    readonly burn: BurnState;
+    readonly multicall: MulticallState;
+    readonly lists: ListsState;
+}
+
+export interface SwapState {
+  readonly baseToken?: Token;
+  readonly quoteToken?: Token;
+  readonly quote?: MarketBuySwapQuote | MarketSellSwapQuote;
+  readonly isBuy?: boolean;
+  readonly quoteState?: SwapQuoteState;
+
+  readonly independentField?: SwapField
+  readonly typedValue?: string
+  readonly [SwapField.INPUT]?: {
+    readonly currencyId: string | undefined
+  }
+  readonly [SwapField.OUTPUT]?: {
+    readonly currencyId: string | undefined
+  }
+  // the typed recipient address or ENS name, or null if swap should go to sender
+  readonly recipient?: string | null
 }
 
 export enum StepKind {

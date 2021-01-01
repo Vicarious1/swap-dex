@@ -8,14 +8,9 @@ import {
   updateBlockNumber
 } from './actions'
 
-type PopupList = Array<{ key: string; show: boolean; content: PopupContent; removeAfterMs: number | null }>
+import { ApplicationState } from "../../../../util/types"
 
-export interface ApplicationState {
-  blockNumber: { [chainId: number]: number }
-  popupList: PopupList
-  walletModalOpen: boolean
-  settingsMenuOpen: boolean
-}
+type PopupList = Array<{ key: string; show: boolean; content: PopupContent; removeAfterMs: number | null }>
 
 const initialState: ApplicationState = {
   blockNumber: {},

@@ -4,27 +4,12 @@ import {
   checkedTransaction,
   clearAllTransactions,
   finalizeTransaction,
-  SerializableTransactionReceipt
+
 } from './actions'
 
+import { TransactionState, TransactionDetails } from "../../../../util/types"
+
 const now = () => new Date().getTime()
-
-export interface TransactionDetails {
-  hash: string
-  approval?: { tokenAddress: string; spender: string }
-  summary?: string
-  receipt?: SerializableTransactionReceipt
-  lastCheckedBlockNumber?: number
-  addedTime: number
-  confirmedTime?: number
-  from: string
-}
-
-export interface TransactionState {
-  [chainId: number]: {
-    [txHash: string]: TransactionDetails
-  }
-}
 
 export const initialState: TransactionState = {}
 

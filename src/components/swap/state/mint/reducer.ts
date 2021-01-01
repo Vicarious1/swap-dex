@@ -1,14 +1,9 @@
 import { createReducer } from '@reduxjs/toolkit'
-import { Field, resetMintState, typeInput } from './actions'
-
-export interface MintState {
-  readonly independentField: Field
-  readonly typedValue: string
-  readonly otherTypedValue: string // for the case when there's no liquidity
-}
+import { resetMintState, typeInput } from './actions'
+import { MintState, MintField } from "../../../../util/types"
 
 const initialState: MintState = {
-  independentField: Field.CURRENCY_A,
+  independentField: MintField.CURRENCY_A,
   typedValue: '',
   otherTypedValue: ''
 }

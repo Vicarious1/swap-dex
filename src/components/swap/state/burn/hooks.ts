@@ -9,8 +9,9 @@ import { wrappedCurrency } from '../../utils/wrappedCurrency'
 import { AppDispatch, AppState } from '../index'
 import { tryParseAmount } from '../swap/hooks'
 import { useTokenBalances } from '../wallet/hooks'
-import { Field, typeInput } from './actions'
+import { typeInput } from './actions'
 import {useTranslation} from "react-i18next";
+import { BurnField } from "../../../../util/types"
 
 export function useBurnState(): AppState['burn'] {
   return useSelector<AppState, AppState['burn']>(state => state.burn)
@@ -22,10 +23,10 @@ export function useDerivedBurnInfo(
 ): {
   pair?: Pair | null
   parsedAmounts: {
-    [Field.LIQUIDITY_PERCENT]: Percent
-    [Field.LIQUIDITY]?: TokenAmount
-    [Field.CURRENCY_A]?: CurrencyAmount
-    [Field.CURRENCY_B]?: CurrencyAmount
+    [BurnField.LIQUIDITY_PERCENT]: Percent
+    [BurnField.LIQUIDITY]?: TokenAmount
+    [BurnField.CURRENCY_A]?: CurrencyAmount
+    [BurnField.CURRENCY_B]?: CurrencyAmount
   }
   error?: string
 } {
@@ -43,9 +44,9 @@ export function useDerivedBurnInfo(
 
   const [tokenA, tokenB] = [wrappedCurrency(currencyA, chainId), wrappedCurrency(currencyB, chainId)]
   const tokens = {
-    [Field.CURRENCY_A]: tokenA,
-    [Field.CURRENCY_B]: tokenB,
-    [Field.LIQUIDITY]: pair?.liquidityToken
+    [BurnField.CURRENCY_A]: tokenA,
+    [BurnField.CURRENCY_B]: tokenB,
+    [BurnField.LIQUIDITY]: pair?.liquidityToken
   }
 
   // liquidity values
@@ -68,18 +69,18 @@ export function useDerivedBurnInfo(
     JSBI.greaterThanOrEqual(totalSupply.raw, userLiquidity.raw)
       ? new TokenAmount(tokenB, pair.getLiquidityValue(tokenB, totalSupply, userLiquidity, false).raw)
       : undefined
-  const liquidityValues: { [Field.CURRENCY_A]?: TokenAmount; [Field.CURRENCY_B]?: TokenAmount } = {
-    [Field.CURRENCY_A]: liquidityValueA,
-    [Field.CURRENCY_B]: liquidityValueB
+  const liquidityValues: { [BurnField.CURRENCY_A]?: TokenAmount; [BurnField.CURRENCY_B]?: TokenAmount } = {
+    [BurnField.CURRENCY_A]: liquidityValueA,
+    [BurnField.CURRENCY_B]: liquidityValueB
   }
 
   let percentToRemove: Percent = new Percent('0', '100')
   // user specified a %
-  if (independentField === Field.LIQUIDITY_PERCENT) {
+  if (independentField === BurnField.LIQUIDITY_PERCENT) {
     percentToRemove = new Percent(typedValue, '100')
   }
   // user specified a specific amount of liquidity tokens
-  else if (independentField === Field.LIQUIDITY) {
+  else if (independentField === BurnField.LIQUIDITY) {
     if (pair?.liquidityToken) {
       const independentAmount = tryParseAmount(typedValue, pair.liquidityToken)
       if (independentAmount && userLiquidity && !independentAmount.greaterThan(userLiquidity)) {
@@ -99,21 +100,21 @@ export function useDerivedBurnInfo(
   }
 
   const parsedAmounts: {
-    [Field.LIQUIDITY_PERCENT]: Percent
-    [Field.LIQUIDITY]?: TokenAmount
-    [Field.CURRENCY_A]?: TokenAmount
-    [Field.CURRENCY_B]?: TokenAmount
+    [BurnField.LIQUIDITY_PERCENT]: Percent
+    [BurnField.LIQUIDITY]?: TokenAmount
+    [BurnField.CURRENCY_A]?: TokenAmount
+    [BurnField.CURRENCY_B]?: TokenAmount
   } = {
-    [Field.LIQUIDITY_PERCENT]: percentToRemove,
-    [Field.LIQUIDITY]:
+    [BurnField.LIQUIDITY_PERCENT]: percentToRemove,
+    [BurnField.LIQUIDITY]:
       userLiquidity && percentToRemove && percentToRemove.greaterThan('0')
         ? new TokenAmount(userLiquidity.token, percentToRemove.multiply(userLiquidity.raw).quotient)
         : undefined,
-    [Field.CURRENCY_A]:
+    [BurnField.CURRENCY_A]:
       tokenA && percentToRemove && percentToRemove.greaterThan('0') && liquidityValueA
         ? new TokenAmount(tokenA, percentToRemove.multiply(liquidityValueA.raw).quotient)
         : undefined,
-    [Field.CURRENCY_B]:
+    [BurnField.CURRENCY_B]:
       tokenB && percentToRemove && percentToRemove.greaterThan('0') && liquidityValueB
         ? new TokenAmount(tokenB, percentToRemove.multiply(liquidityValueB.raw).quotient)
         : undefined
@@ -124,7 +125,7 @@ export function useDerivedBurnInfo(
     error = 'Connect Wallet'
   }
 
-  if (!parsedAmounts[Field.LIQUIDITY] || !parsedAmounts[Field.CURRENCY_A] || !parsedAmounts[Field.CURRENCY_B]) {
+  if (!parsedAmounts[BurnField.LIQUIDITY] || !parsedAmounts[BurnField.CURRENCY_A] || !parsedAmounts[BurnField.CURRENCY_B]) {
     error = error ?? t('enterAnAmount')
   }
 
@@ -132,12 +133,12 @@ export function useDerivedBurnInfo(
 }
 
 export function useBurnActionHandlers(): {
-  onUserInput: (field: Field, typedValue: string) => void
+  onUserInput: (field: BurnField, typedValue: string) => void
 } {
   const dispatch = useDispatch<AppDispatch>()
 
   const onUserInput = useCallback(
-    (field: Field, typedValue: string) => {
+    (field: BurnField, typedValue: string) => {
       dispatch(typeInput({ field, typedValue }))
     },
     [dispatch]

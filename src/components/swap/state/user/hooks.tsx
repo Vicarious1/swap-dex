@@ -12,13 +12,13 @@ import {
   addSerializedPair,
   addSerializedToken,
   removeSerializedToken,
-  SerializedPair,
-  SerializedToken,
   updateUserDarkMode,
   updateUserDeadline,
   updateUserExpertMode,
   updateUserSlippageTolerance
 } from './actions'
+
+import { SerializedPair, SerializedToken } from "../../../../util/types"
 
 function serializeToken(token: Token): SerializedToken {
   return {
@@ -41,7 +41,7 @@ function deserializeToken(serializedToken: SerializedToken): Token {
 }
 
 export function useIsDarkMode(): boolean {
-  return false;
+  return true;
 }
 
 export function useDarkModeManager(): [boolean, () => void] {
@@ -56,7 +56,7 @@ export function useDarkModeManager(): [boolean, () => void] {
 }
 
 export function useIsExpertMode(): boolean {
-  return useSelector<AppState, AppState['user']['userExpertMode']>(state => state.user.userExpertMode)
+  return false //useSelector<AppState, AppState['user']['userExpertMode']>(state => state.user.userExpertMode)
 }
 
 export function useExpertModeManager(): [boolean, () => void] {
@@ -88,10 +88,10 @@ export function useUserSlippageTolerance(): [number, (slippage: number) => void]
 
 export function useUserDeadline(): [number, (slippage: number) => void] {
   const dispatch = useDispatch<AppDispatch>()
-  const userDeadline = useSelector<AppState, AppState['user']['userDeadline']>(state => {
-    return state.user.userDeadline
-  })
-
+  // const userDeadline = useSelector<AppState, AppState['user']['userDeadline']>(state => {
+  //   return state.user.userDeadline
+  // })
+  //
   const setUserDeadline = useCallback(
     (userDeadline: number) => {
       dispatch(updateUserDeadline({ userDeadline }))
@@ -99,7 +99,8 @@ export function useUserDeadline(): [number, (slippage: number) => void] {
     [dispatch]
   )
 
-  return [userDeadline, setUserDeadline]
+  // return [userDeadline, setUserDeadline]
+  return [1, setUserDeadline]
 }
 
 export function useAddUserToken(): (token: Token) => void {
@@ -124,6 +125,7 @@ export function useRemoveUserAddedToken(): (chainId: number, address: string) =>
 
 export function useUserAddedTokens(): Token[] {
   const { chainId } = useActiveWeb3React()
+  console.log(chainId)
   const serializedTokensMap = useSelector<AppState, AppState['user']['tokens']>(({ user: { tokens } }) => tokens)
 
   return useMemo(() => {

@@ -15,7 +15,6 @@ const toolbar = <ToolbarContentContainer />;
 
 const Swap = lazy(() => import('./pages/swap'));
 
-
 const SwapApp = () => {
     const themeColor = useSelector(getERC20Theme);
     return (

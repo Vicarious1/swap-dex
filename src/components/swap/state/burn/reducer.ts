@@ -1,13 +1,9 @@
 import { createReducer } from '@reduxjs/toolkit'
-import { Field, typeInput } from './actions'
-
-export interface BurnState {
-  readonly independentField: Field
-  readonly typedValue: string
-}
+import { typeInput } from './actions'
+import { BurnState, BurnField } from "../../../../util/types"
 
 const initialState: BurnState = {
-  independentField: Field.LIQUIDITY_PERCENT,
+  independentField: BurnField.LIQUIDITY_PERCENT,
   typedValue: '0'
 }
 

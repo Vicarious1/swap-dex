@@ -1,16 +1,7 @@
 import { createAction } from '@reduxjs/toolkit'
 import { ChainId } from '@uniswap/sdk'
 
-export interface SerializableTransactionReceipt {
-  to: string
-  from: string
-  contractAddress: string
-  transactionIndex: number
-  blockHash: string
-  transactionHash: string
-  blockNumber: number
-  status?: number
-}
+import { SerializableTransactionReceipt } from "../../../../util/types"
 
 export const addTransaction = createAction<{
   chainId: ChainId

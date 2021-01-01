@@ -8,28 +8,7 @@ import {
   updateMulticallResults
 } from './actions'
 
-export interface MulticallState {
-  callListeners?: {
-    // on a per-chain basis
-    [chainId: number]: {
-      // stores for each call key the listeners' preferences
-      [callKey: string]: {
-        // stores how many listeners there are per each blocks per fetch preference
-        [blocksPerFetch: number]: number
-      }
-    }
-  }
-
-  callResults: {
-    [chainId: number]: {
-      [callKey: string]: {
-        data?: string | null
-        blockNumber?: number
-        fetchingBlockNumber?: number
-      }
-    }
-  }
-}
+import { MulticallState } from "../../../../util/types"
 
 const initialState: MulticallState = {
   callResults: {}

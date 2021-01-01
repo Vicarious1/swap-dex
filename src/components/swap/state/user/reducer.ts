@@ -6,8 +6,6 @@ import {
   addSerializedToken,
   removeSerializedPair,
   removeSerializedToken,
-  SerializedPair,
-  SerializedToken,
   updateMatchesDarkMode,
   updateUserDarkMode,
   updateUserExpertMode,
@@ -15,38 +13,9 @@ import {
   updateUserDeadline
 } from './actions'
 
+import { UserState, SerializedPair, SerializedToken } from "../../../../util/types"
+
 const currentTimestamp = () => new Date().getTime()
-
-export interface UserState {
-  // the timestamp of the last updateVersion action
-  lastUpdateVersionTimestamp?: number
-
-  userDarkMode: boolean | null // the user's choice for dark mode or light mode
-  matchesDarkMode: boolean // whether the dark mode media query matches
-
-  userExpertMode: boolean
-
-  // user defined slippage tolerance in bips, used in all txns
-  userSlippageTolerance: number
-
-  // deadline set by user in minutes, used in all txns
-  userDeadline: number
-
-  tokens: {
-    [chainId: number]: {
-      [address: string]: SerializedToken
-    }
-  }
-
-  pairs: {
-    [chainId: number]: {
-      // keyed by token0Address:token1Address
-      [key: string]: SerializedPair
-    }
-  }
-
-  timestamp: number
-}
 
 function pairKey(token0Address: string, token1Address: string) {
   return `${token0Address};${token1Address}`

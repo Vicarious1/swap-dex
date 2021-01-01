@@ -5,20 +5,7 @@ import { DEFAULT_LIST_OF_LISTS, DEFAULT_TOKEN_LIST_URL } from '../../constants/l
 import { updateVersion } from '../global/actions'
 import { acceptListUpdate, addList, fetchTokenList, removeList, selectList } from './actions'
 import UNISWAP_DEFAULT_LIST from '@uniswap/default-token-list'
-
-export interface ListsState {
-  readonly byUrl: {
-    readonly [url: string]: {
-      readonly current: TokenList | null
-      readonly pendingUpdate: TokenList | null
-      readonly loadingRequestId: string | null
-      readonly error: string | null
-    }
-  }
-  // this contains the default list of lists from the last time the updateVersion was called, i.e. the app was reloaded
-  readonly lastInitializedDefaultListOfLists?: string[]
-  readonly selectedListUrl: string | undefined
-}
+import { ListsState } from "../../../../util/types"
 
 const NEW_LIST_STATE: ListsState['byUrl'][string] = {
   error: null,

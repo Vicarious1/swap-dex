@@ -13,8 +13,8 @@ import useParsedQueryString from '../hooks/useParsedQueryString'
 import { isAddress } from '../utils'
 import { AppDispatch, AppState } from './index'
 import { useCurrencyBalances } from './wallet/hooks'
-import { Field, replaceSwapState, selectCurrency, setRecipient, switchCurrencies, typeInput } from './actions'
-import { SwapState } from './reducer'
+import { replaceSwapState, selectCurrency, setRecipient, switchCurrencies, typeInput } from './actions'
+import { SwapField, SwapState } from '../../../util/types'
 import useToggledVersion from '../hooks/useToggledVersion'
 import { useUserSlippageTolerance } from './user/hooks'
 import { computeSlippageAdjustedAmounts } from '../utils/prices'
@@ -25,14 +25,14 @@ export function useSwapState(): AppState['swap']  {
 }
 
 export function useSwapActionHandlers(): {
-  onCurrencySelection: (field: Field, currency: Currency) => void
+  onCurrencySelection: (field: SwapField, currency: Currency) => void
   onSwitchTokens: () => void
-  onUserInput: (field: Field, typedValue: string) => void
+  onUserInput: (field: SwapField, typedValue: string) => void
   onChangeRecipient: (recipient: string | null) => void
 } {
   const dispatch = useDispatch<AppDispatch>()
   const onCurrencySelection = useCallback(
-    (field: Field, currency: Currency) => {
+    (field: SwapField, currency: Currency) => {
       dispatch(
         selectCurrency({
           field,
@@ -48,7 +48,7 @@ export function useSwapActionHandlers(): {
   }, [dispatch])
 
   const onUserInput = useCallback(
-    (field: Field, typedValue: string) => {
+    (field: SwapField, typedValue: string) => {
       dispatch(typeInput({ field, typedValue }))
     },
     [dispatch]
@@ -109,8 +109,8 @@ function involvesAddress(trade: Trade, checksummedAddress: string): boolean {
 
 // from the current swap inputs, compute the best trade and return it.
 export function useDerivedSwapInfo(): {
-  currencies: { [field in Field]?: Currency }
-  currencyBalances: { [field in Field]?: CurrencyAmount }
+  currencies: { [field in SwapField]?: Currency }
+  currencyBalances: { [field in SwapField]?: CurrencyAmount }
   parsedAmount: CurrencyAmount | undefined
   v2Trade: Trade | undefined
   inputError?: string
@@ -124,8 +124,8 @@ export function useDerivedSwapInfo(): {
   const {
     independentField,
     typedValue,
-    [Field.INPUT]: { currencyId: inputCurrencyId },
-    [Field.OUTPUT]: { currencyId: outputCurrencyId },
+    [SwapField.INPUT]: { currencyId: inputCurrencyId },
+    [SwapField.OUTPUT]: { currencyId: outputCurrencyId },
     recipient
   } = useSwapState()
 
@@ -139,7 +139,7 @@ export function useDerivedSwapInfo(): {
     outputCurrency ?? undefined
   ])
 
-  const isExactIn: boolean = independentField === Field.INPUT
+  const isExactIn: boolean = independentField === SwapField.INPUT
   const parsedAmount = tryParseAmount(typedValue, (isExactIn ? inputCurrency : outputCurrency) ?? undefined)
 
   const bestTradeExactIn = useTradeExactIn(isExactIn ? parsedAmount : undefined, outputCurrency ?? undefined)
@@ -148,17 +148,17 @@ export function useDerivedSwapInfo(): {
   const v2Trade = isExactIn ? bestTradeExactIn : bestTradeExactOut
 
   const currencyBalances = {
-    [Field.INPUT]: relevantTokenBalances[0],
-    [Field.OUTPUT]: relevantTokenBalances[1]
+    [SwapField.INPUT]: relevantTokenBalances[0],
+    [SwapField.OUTPUT]: relevantTokenBalances[1]
   }
 
-  const currencies: { [field in Field]?: Currency } = {
-    [Field.INPUT]: inputCurrency ?? undefined,
-    [Field.OUTPUT]: outputCurrency ?? undefined
+  const currencies: { [field in SwapField]?: Currency } = {
+    [SwapField.INPUT]: inputCurrency ?? undefined,
+    [SwapField.OUTPUT]: outputCurrency ?? undefined
   }
 
   // get link to trade on v1, if a better rate exists
-  const v1Trade = useV1Trade(isExactIn, currencies[Field.INPUT], currencies[Field.OUTPUT], parsedAmount)
+  const v1Trade = useV1Trade(isExactIn, currencies[SwapField.INPUT], currencies[SwapField.OUTPUT], parsedAmount)
 
   let inputError: string | undefined
   if (!account) {
@@ -169,7 +169,7 @@ export function useDerivedSwapInfo(): {
     inputError = inputError ?? t('enterAnAmount')
   }
 
-  if (!currencies[Field.INPUT] || !currencies[Field.OUTPUT]) {
+  if (!currencies[SwapField.INPUT] || !currencies[SwapField.OUTPUT]) {
     inputError = inputError ?? 'Select a token'
   }
 
@@ -195,13 +195,13 @@ export function useDerivedSwapInfo(): {
 
   // compare input balance to max input based on version
   const [balanceIn, amountIn] = [
-    currencyBalances[Field.INPUT],
+    currencyBalances[SwapField.INPUT],
     toggledVersion === Version.v1
       ? slippageAdjustedAmountsV1
-        ? slippageAdjustedAmountsV1[Field.INPUT]
+        ? slippageAdjustedAmountsV1[SwapField.INPUT]
         : null
       : slippageAdjustedAmounts
-      ? slippageAdjustedAmounts[Field.INPUT]
+      ? slippageAdjustedAmounts[SwapField.INPUT]
       : null
   ]
 
@@ -233,8 +233,8 @@ function parseTokenAmountURLParameter(urlParam: any): string {
   return typeof urlParam === 'string' && !isNaN(parseFloat(urlParam)) ? urlParam : ''
 }
 
-function parseIndependentFieldURLParameter(urlParam: any): Field {
-  return typeof urlParam === 'string' && urlParam.toLowerCase() === 'output' ? Field.OUTPUT : Field.INPUT
+function parseIndependentFieldURLParameter(urlParam: any): SwapField {
+  return typeof urlParam === 'string' && urlParam.toLowerCase() === 'output' ? SwapField.OUTPUT : SwapField.INPUT
 }
 
 const ENS_NAME_REGEX = /^[-a-zA-Z0-9@:%._+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_+.~#?&/=]*)?$/
@@ -262,10 +262,10 @@ export function queryParametersToSwapState(parsedQs: ParsedQs): SwapState {
   const recipient = validatedRecipient(parsedQs.recipient)
 
   return {
-    [Field.INPUT]: {
+    [SwapField.INPUT]: {
       currencyId: inputCurrency
     },
-    [Field.OUTPUT]: {
+    [SwapField.OUTPUT]: {
       currencyId: outputCurrency
     },
     typedValue: parseTokenAmountURLParameter(parsedQs.exactAmount),
@@ -293,13 +293,13 @@ export function useDefaultsFromURLSearch():
       replaceSwapState({
         typedValue: parsed.typedValue,
         field: parsed.independentField,
-        inputCurrencyId: parsed[Field.INPUT].currencyId,
-        outputCurrencyId: parsed[Field.OUTPUT].currencyId,
+        inputCurrencyId: parsed[SwapField.INPUT].currencyId,
+        outputCurrencyId: parsed[SwapField.OUTPUT].currencyId,
         recipient: parsed.recipient
       })
     )
 
-    setResult({ inputCurrencyId: parsed[Field.INPUT].currencyId, outputCurrencyId: parsed[Field.OUTPUT].currencyId })
+    setResult({ inputCurrencyId: parsed[SwapField.INPUT].currencyId, outputCurrencyId: parsed[SwapField.OUTPUT].currencyId })
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [dispatch, chainId])
 

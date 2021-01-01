@@ -3,7 +3,6 @@ import React, { useContext, useMemo, useState } from 'react'
 import { Repeat } from 'react-feather'
 import { Text } from 'rebass'
 import { ThemeContext } from 'styled-components'
-import { Field } from './state/swap/actions'
 import { TYPE } from './theme'
 import {
   computeSlippageAdjustedAmounts,
@@ -17,6 +16,7 @@ import QuestionHelper from './QuestionHelper'
 import { AutoRow, RowBetween, RowFixed } from './Row'
 import FormattedPriceImpact from './FormattedPriceImpact'
 import { StyledBalanceMaxMini, SwapCallbackError } from './styleds'
+import { SwapField } from '../../util/types'
 
 export default function SwapModalFooter({
   trade,
@@ -76,8 +76,8 @@ export default function SwapModalFooter({
           <RowFixed>
             <TYPE.black fontSize={14}>
               {trade.tradeType === TradeType.EXACT_INPUT
-                ? slippageAdjustedAmounts[Field.OUTPUT]?.toSignificant(4) ?? '-'
-                : slippageAdjustedAmounts[Field.INPUT]?.toSignificant(4) ?? '-'}
+                ? slippageAdjustedAmounts[SwapField.OUTPUT]?.toSignificant(4) ?? '-'
+                : slippageAdjustedAmounts[SwapField.INPUT]?.toSignificant(4) ?? '-'}
             </TYPE.black>
             <TYPE.black fontSize={14} marginLeft={'4px'}>
               {trade.tradeType === TradeType.EXACT_INPUT

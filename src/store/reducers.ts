@@ -12,8 +12,18 @@ import { bzx } from './bzx/reducers';
 import { collectibles } from './collectibles/reducers';
 import { market } from './market/reducers';
 import { relayer } from './relayer/reducers';
-import { swap } from './swap/reducers';
+import { swap as swapPage } from './swap/reducers';
 import { ui } from './ui/reducers';
+
+import application from '../components/swap/state/application/reducer'
+import { updateVersion } from '../components/swap/state/global/actions'
+import user from '../components/swap/state/user/reducer'
+import transactions from '../components/swap/state/transactions/reducer'
+import swap from '../components/swap/state/swap/reducer'
+import mint from '../components/swap/state/mint/reducer'
+import lists from '../components/swap/state/lists/reducer'
+import burn from '../components/swap/state/burn/reducer'
+import multicall from '../components/swap/state/multicall/reducer'
 
 export type RootAction = ActionType<typeof actions>;
 
@@ -27,5 +37,13 @@ export const createRootReducer = (history: History) =>
         collectibles,
         bzx,
         aave,
+        swapPage,
+        application,
+        user,
+        transactions,
         swap,
+        mint,
+        burn,
+        multicall,
+        lists
     });

@@ -3,7 +3,6 @@ import React, { useContext, useMemo } from 'react'
 import { ArrowDown, AlertTriangle } from 'react-feather'
 import { Text } from 'rebass'
 import { ThemeContext } from 'styled-components'
-import { Field } from './state/swap/actions'
 import { TYPE } from './theme'
 import { ButtonPrimary } from './Button'
 import { isAddress, shortenAddress } from './utils'
@@ -12,6 +11,7 @@ import { AutoColumn } from './Column'
 import CurrencyLogo from './CurrencyLogo'
 import { RowBetween, RowFixed } from './Row'
 import { TruncatedText, SwapShowAcceptChanges } from './styleds'
+import { SwapField } from '../../util/types'
 
 export default function SwapModalHeader({
   trade,
@@ -101,7 +101,7 @@ export default function SwapModalHeader({
           <TYPE.italic textAlign="left" style={{ width: '100%' }}>
             {`Output is estimated. You will receive at least `}
             <b>
-              {slippageAdjustedAmounts[Field.OUTPUT]?.toSignificant(6)} {trade.outputAmount.currency.symbol}
+              {slippageAdjustedAmounts[SwapField.OUTPUT]?.toSignificant(6)} {trade.outputAmount.currency.symbol}
             </b>
             {' or the transaction will revert.'}
           </TYPE.italic>
@@ -109,7 +109,7 @@ export default function SwapModalHeader({
           <TYPE.italic textAlign="left" style={{ width: '100%' }}>
             {`Input is estimated. You will sell at most `}
             <b>
-              {slippageAdjustedAmounts[Field.INPUT]?.toSignificant(6)} {trade.inputAmount.currency.symbol}
+              {slippageAdjustedAmounts[SwapField.INPUT]?.toSignificant(6)} {trade.inputAmount.currency.symbol}
             </b>
             {' or the transaction will revert.'}
           </TYPE.italic>

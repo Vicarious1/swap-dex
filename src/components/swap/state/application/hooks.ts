@@ -7,7 +7,7 @@ import { AppState } from '../index'
 export function useBlockNumber(): number | undefined {
   const { chainId } = useActiveWeb3React()
 
-  return useSelector((state: AppState) => state.application.blockNumber[chainId ?? -1])
+  return 1 //useSelector((state: AppState) => state.application.blockNumber[chainId ?? -1])
 }
 
 export function useWalletModalOpen(): boolean {

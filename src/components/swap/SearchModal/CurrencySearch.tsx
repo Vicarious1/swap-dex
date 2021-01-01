@@ -113,6 +113,8 @@ export function CurrencySearch({
     const input = event.target.value
     const checksummedInput = isAddress(input)
     setSearchQuery(checksummedInput || input)
+
+    // eslint-disable-next-line @typescript-eslint/no-unused-expressions
     fixedList.current?.scrollTo(0)
   }, [])
 

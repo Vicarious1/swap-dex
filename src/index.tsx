@@ -4,7 +4,7 @@ import ReactDOM from 'react-dom';
 // import ReactGA from 'react-ga';
 import ReactModal from 'react-modal';
 import { Provider } from 'react-redux';
-import { Redirect, Route, Switch } from 'react-router';
+import { Redirect, Route, Switch } from 'react-router-dom';
 import 'sanitize.css';
 
 import {

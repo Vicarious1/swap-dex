@@ -11,6 +11,16 @@ import ReactGA from 'react-ga'
 import { Text } from 'rebass'
 import { ArrowDown } from 'react-feather'
 import { CurrencyAmount, JSBI, Token, Trade } from '@uniswap/sdk'
+import {
+    getEthAccount,
+    getEthBalance,
+    getEthInUsd,
+    getTokenBalances,
+    getTokensPrice,
+    getWallet,
+    getWeb3State,
+    getWethTokenBalance,
+} from '../../store/selectors';
 
 import { ButtonError, ButtonLight, ButtonPrimary, ButtonConfirmed } from './Button'
 import Modal from "./Modal";
@@ -46,7 +56,7 @@ import {
   } from './state/hooks'
 import { ApprovalState, useApproveCallbackFromTrade } from './hooks/useApproveCallback'
 import useWrapCallback, { WrapType } from './hooks/useWrapCallback'
-import { Field } from './state/actions'
+import { SwapField } from '../../util/types'
 import { useToggleSettingsMenu, useWalletModalToggle } from './state/application/hooks'
 import { LinkStyledButton, TYPE } from './theme'
 
@@ -73,7 +83,7 @@ export default function Swap() {
     setDismissTokenWarning(true)
   }, [])
 
-  const { account } = useActiveWeb3React()
+  const account = useSelector(getEthAccount)
   const theme = useTheme();
 
   // toggle wallet when disconnected
@@ -98,8 +108,8 @@ export default function Swap() {
     inputError: swapInputError
   } = useDerivedSwapInfo()
   const { wrapType, execute: onWrap, inputError: wrapInputError } = useWrapCallback(
-    currencies[Field.INPUT],
-    currencies[Field.OUTPUT],
+    currencies[SwapField.INPUT],
+    currencies[SwapField.OUTPUT],
     typedValue
   )
   const showWrap: boolean = wrapType !== WrapType.NOT_APPLICABLE
@@ -114,27 +124,27 @@ export default function Swap() {
 
   const parsedAmounts = showWrap
     ? {
-        [Field.INPUT]: parsedAmount,
-        [Field.OUTPUT]: parsedAmount
+        [SwapField.INPUT]: parsedAmount,
+        [SwapField.OUTPUT]: parsedAmount
       }
     : {
-        [Field.INPUT]: independentField === Field.INPUT ? parsedAmount : trade?.inputAmount,
-        [Field.OUTPUT]: independentField === Field.OUTPUT ? parsedAmount : trade?.outputAmount
+        [SwapField.INPUT]: independentField === SwapField.INPUT ? parsedAmount : trade?.inputAmount,
+        [SwapField.OUTPUT]: independentField === SwapField.OUTPUT ? parsedAmount : trade?.outputAmount
       }
 
   const { onSwitchTokens, onCurrencySelection, onUserInput, onChangeRecipient } = useSwapActionHandlers()
   const isValid = !swapInputError
-  const dependentField: Field = independentField === Field.INPUT ? Field.OUTPUT : Field.INPUT
+  const dependentField: SwapField = independentField === SwapField.INPUT ? SwapField.OUTPUT : SwapField.INPUT
 
   const handleTypeInput = useCallback(
     (value: string) => {
-      onUserInput(Field.INPUT, value)
+      onUserInput(SwapField.INPUT, value)
     },
     [onUserInput]
   )
   const handleTypeOutput = useCallback(
     (value: string) => {
-      onUserInput(Field.OUTPUT, value)
+      onUserInput(SwapField.OUTPUT, value)
     },
     [onUserInput]
   )
@@ -163,7 +173,7 @@ export default function Swap() {
 
   const route = trade?.route
   const userHasSpecifiedInputOutput = Boolean(
-    currencies[Field.INPUT] && currencies[Field.OUTPUT] && parsedAmounts[independentField]?.greaterThan(JSBI.BigInt(0))
+    currencies[SwapField.INPUT] && currencies[SwapField.OUTPUT] && parsedAmounts[independentField]?.greaterThan(JSBI.BigInt(0))
   )
   const noRoute = !route
 
@@ -180,8 +190,8 @@ export default function Swap() {
     }
   }, [approval, approvalSubmitted])
 
-  const maxAmountInput: CurrencyAmount | undefined = maxAmountSpend(currencyBalances[Field.INPUT])
-  const atMaxAmountInput = Boolean(maxAmountInput && parsedAmounts[Field.INPUT]?.equalTo(maxAmountInput))
+  const maxAmountInput: CurrencyAmount | undefined = maxAmountSpend(currencyBalances[SwapField.INPUT])
+  const atMaxAmountInput = Boolean(maxAmountInput && parsedAmounts[SwapField.INPUT]?.equalTo(maxAmountInput))
 
   // the callback to execute the swap
   const { callback: swapCallback, error: swapCallbackError } = useSwapCallback(
@@ -250,7 +260,7 @@ export default function Swap() {
     setSwapState({ showConfirm: false, tradeToConfirm, attemptingTxn, swapErrorMessage, txHash })
     // if there was a tx hash, we want to clear the input
     if (txHash) {
-      onUserInput(Field.INPUT, '')
+      onUserInput(SwapField.INPUT, '')
     }
   }, [attemptingTxn, onUserInput, swapErrorMessage, tradeToConfirm, txHash])
 
@@ -261,16 +271,16 @@ export default function Swap() {
   const handleInputSelect = useCallback(
     inputCurrency => {
       setApprovalSubmitted(false) // reset 2 step UI for approvals
-      onCurrencySelection(Field.INPUT, inputCurrency)
+      onCurrencySelection(SwapField.INPUT, inputCurrency)
     },
     [onCurrencySelection]
   )
 
   const handleMaxInput = useCallback(() => {
-    maxAmountInput && onUserInput(Field.INPUT, maxAmountInput.toExact())
+    maxAmountInput && onUserInput(SwapField.INPUT, maxAmountInput.toExact())
   }, [maxAmountInput, onUserInput])
 
-  const handleOutputSelect = useCallback(outputCurrency => onCurrencySelection(Field.OUTPUT, outputCurrency), [
+  const handleOutputSelect = useCallback(outputCurrency => onCurrencySelection(SwapField.OUTPUT, outputCurrency), [
     onCurrencySelection
   ])
 
@@ -289,33 +299,33 @@ export default function Swap() {
     background-color: #F5F6FA;
     width: 150px;
     height: 80px;
-    margin-top: -4rem; 
+    margin-top: -4rem;
     z-index: 3;
     position: relative;
     -webkit-box-shadow: 0px 6px 10px rgba(0, 0, 0, 0.2);  /* Safari 3-4, iOS 4.0.2 - 4.2, Android 2.3+ */
     -moz-box-shadow: 0px 6px 10px rgba(0, 0, 0, 0.2);   /* Firefox 3.5 - 3.6 */
-    box-shadow: -10px -8px 10px rgba(0, 0, 0, 0.05); 
-    
+    box-shadow: -10px -8px 10px rgba(0, 0, 0, 0.05);
+
     img {
-      margin-top: 3rem;  
+      margin-top: 3rem;
     }
-    
+
     ${({ theme }) => theme.mediaWidth.upToMedium`
       flex-direction: column;
       width: 6rem;
       height: 6rem;
       border-radius: 100%;
       margin-top: -2.5rem;
-      
+
       img {
         margin-top: 0.25rem;
-      } 
-      
+      }
+
       #swap-circle {
         width: 5rem;
         height: 5rem;
       }
-      
+
       #swap-circle-logo {
         width: 2rem;
         height: 2rem;
@@ -334,8 +344,8 @@ export default function Swap() {
     width: 40%;
     -webkit-box-shadow: 0px 6px 10px rgba(0, 0, 0, 0.2);  /* Safari 3-4, iOS 4.0.2 - 4.2, Android 2.3+ */
     -moz-box-shadow: 0px 6px 10px rgba(0, 0, 0, 0.2);   /* Firefox 3.5 - 3.6 */
-    box-shadow: 0px 6px 10px rgba(0, 0, 0, 0.2); 
-    
+    box-shadow: 0px 6px 10px rgba(0, 0, 0, 0.2);
+
     ${({ theme }) => theme.mediaWidth.upToMedium`
       display: none;
     `};
@@ -367,7 +377,7 @@ export default function Swap() {
     padding: 20px;
     -webkit-box-shadow: 0px 6px 10px rgba(0, 0, 0, 0.2);  /* Safari 3-4, iOS 4.0.2 - 4.2, Android 2.3+ */
     -moz-box-shadow: 0px 6px 10px rgba(0, 0, 0, 0.2);   /* Firefox 3.5 - 3.6 */
-    box-shadow: 0px 6px 10px rgba(0, 0, 0, 0.2); 
+    box-shadow: 0px 6px 10px rgba(0, 0, 0, 0.2);
   `
 
   const AssetsContent = styled.div`
@@ -382,12 +392,12 @@ export default function Swap() {
     padding: 20px;
     -webkit-box-shadow: 0px 6px 10px rgba(0, 0, 0, 0.2);  /* Safari 3-4, iOS 4.0.2 - 4.2, Android 2.3+ */
     -moz-box-shadow: 0px 6px 10px rgba(0, 0, 0, 0.2);   /* Firefox 3.5 - 3.6 */
-    box-shadow: 0px 6px 10px rgba(0, 0, 0, 0.2); 
+    box-shadow: 0px 6px 10px rgba(0, 0, 0, 0.2);
   `
 
   const WalletCircle = styled.div`
     position: relative;
-    
+
     svg {
       display: flex;
     }
@@ -397,7 +407,7 @@ export default function Swap() {
     display: flex;
     flex-direction: row;
     justify-content: center;
-    
+
     ${({ theme }) => theme.mediaWidth.upToMedium`
       flex-direction: column;
     `};
@@ -426,14 +436,14 @@ export default function Swap() {
 
           <InputPanelWrapper>
             <CurrencyInputPanel
-              label={independentField === Field.OUTPUT && !showWrap && trade ? 'From (estimated)' : 'From'}
-              value={formattedAmounts[Field.INPUT]}
+              label={independentField === SwapField.OUTPUT && !showWrap && trade ? 'From (estimated)' : 'From'}
+              value={formattedAmounts[SwapField.INPUT]}
               showMaxButton={!atMaxAmountInput}
-              currency={currencies[Field.INPUT]}
+              currency={currencies[SwapField.INPUT]}
               onUserInput={handleTypeInput}
               onMax={handleMaxInput}
               onCurrencySelect={handleInputSelect}
-              otherCurrency={currencies[Field.OUTPUT]}
+              otherCurrency={currencies[SwapField.OUTPUT]}
               side='left'
               id="swap-currency-input"
             />
@@ -446,7 +456,7 @@ export default function Swap() {
                       setApprovalSubmitted(false) // reset 2 step UI for approvals
                       onSwitchTokens()
                     }}
-                    color={currencies[Field.INPUT] && currencies[Field.OUTPUT] ? theme.primary1 : theme.text2}
+                    color={currencies[SwapField.INPUT] && currencies[SwapField.OUTPUT] ? theme.primary1 : theme.text2}
                   />
                 </ArrowWrapper>
                 {recipient === null && !showWrap && isExpertMode ? (
@@ -457,13 +467,13 @@ export default function Swap() {
               </AutoRow>
             </AutoColumn>
             <CurrencyInputPanel
-              value={formattedAmounts[Field.OUTPUT]}
+              value={formattedAmounts[SwapField.OUTPUT]}
               onUserInput={handleTypeOutput}
-              label={independentField === Field.INPUT && !showWrap && trade ? 'To (estimated)' : 'To'}
+              label={independentField === SwapField.INPUT && !showWrap && trade ? 'To (estimated)' : 'To'}
               showMaxButton={false}
-              currency={currencies[Field.OUTPUT]}
+              currency={currencies[SwapField.OUTPUT]}
               onCurrencySelect={handleOutputSelect}
-              otherCurrency={currencies[Field.INPUT]}
+              otherCurrency={currencies[SwapField.INPUT]}
               side='right'
               id="swap-currency-output"
             />
@@ -552,7 +562,7 @@ export default function Swap() {
                       ) : approvalSubmitted && approval === ApprovalState.APPROVED ? (
                           'Approved'
                       ) : (
-                          'Approve ' + currencies[Field.INPUT]?.symbol
+                          'Approve ' + currencies[SwapField.INPUT]?.symbol
                       )}
                     </ButtonConfirmed>
                     <ButtonError
@@ -663,7 +673,7 @@ export default function Swap() {
                             ) : approvalSubmitted && approval === ApprovalState.APPROVED ? (
                                 'Approved'
                             ) : (
-                                'Approve ' + currencies[Field.INPUT]?.symbol
+                                'Approve ' + currencies[SwapField.INPUT]?.symbol
                             )}
                           </ButtonConfirmed>
                           <ButtonError
@@ -740,4 +750,4 @@ export default function Swap() {
     );
 };
 
-export { Swap};
+export { Swap };

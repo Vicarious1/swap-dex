@@ -6,11 +6,11 @@ import { ColumnWide } from '../../common/column_wide';
 import { Content } from '../common/content_wrapper';
 import { Swap } from '../../swap/swap';
 import { Provider } from 'react-redux'
-import store from '../../swap/state'
+import store from '../../../store'
 import ThemeProvider, { FixedGlobalStyle, ThemedGlobalStyle } from '../../swap/theme'
 import getLibrary from '../../swap/utils/getLibrary'
 import { NetworkContextName } from '../../swap/constants'
-
+import { CheckWalletStateModalContainer } from '../../common/check_wallet_state_modal_container';
 
 const Web3ProviderNetwork = createWeb3ReactRoot(NetworkContextName);
 
@@ -37,18 +37,20 @@ const CenteredContent = styled(Content as any)`
 `;
 
 const SwapPage = () => (
-    <ThemeProvider>
-        <ThemedGlobalStyle />
-        <Web3ReactProvider getLibrary={getLibrary}>
-            <Web3ProviderNetwork getLibrary={getLibrary}>
+  <ThemeProvider>
+    <ThemedGlobalStyle />
+    <CheckWalletStateModalContainer>
+      <Web3ReactProvider getLibrary={getLibrary}>
+          <Web3ProviderNetwork getLibrary={getLibrary}>
             <Provider store={store}>
                 <CenteredContent>
                     <Swap />
                 </CenteredContent>
             </Provider>
-            </Web3ProviderNetwork>
-        </Web3ReactProvider>
-    </ThemeProvider>
+          </Web3ProviderNetwork>
+      </Web3ReactProvider>
+    </CheckWalletStateModalContainer>
+</ThemeProvider>
 );
 
-export {SwapPage as default };
+export { SwapPage as default };

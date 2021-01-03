@@ -4,11 +4,8 @@ import { Theme } from '../../../themes/commons';
 import { InputSearch } from '../common/input_search';
 import { SearchModalContainer } from '../modals/search-modal';
 
-interface Props {
-    theme: Theme;
-}
 
-export const CollectiblesSearch: React.FC<Props> = props => {
+export const CollectiblesSearch: React.FC<{}> = props => {
     const [isModalOpen, setIsModalOpen] = useState(false);
 
     const showModal = () => setIsModalOpen(true);
@@ -17,7 +14,7 @@ export const CollectiblesSearch: React.FC<Props> = props => {
     return (
         <>
             <InputSearch placeholder={'Search'} onClick={showModal} readOnly={true} focusOutline={false} />
-            <SearchModalContainer isOpen={isModalOpen} onClose={hideModal} theme={props.theme} />
+            <SearchModalContainer isOpen={isModalOpen} onClose={hideModal}/>
         </>
     );
 };

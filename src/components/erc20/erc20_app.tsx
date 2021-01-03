@@ -27,7 +27,7 @@ const MarketMakerPage = lazy(() => import('./pages/market_maker'));
 const Erc20App = () => {
     const themeColor = useSelector(getERC20Theme);
     return (
-        <ThemeProvider theme={themeColor}>
+        <ThemeProvider theme={themeColor as any}>
             <GeneralLayoutContainer toolbar={toolbar}>
                 <AdBlockDetector />
                 <Switch>

@@ -4,16 +4,12 @@ import styled from 'styled-components';
 import { Dropdown, DropdownPositions } from '../common/dropdown';
 import { ChevronDownIcon } from '../common/icons/chevron_down_icon';
 
-import { WalletConnectionStatusDot } from './wallet_connections_status_dot';
+import { WalletConnectionStatusDot ,WalletConnectionStatusDotStyled } from './wallet_connections_status_dot';
 
 const WalletConnectionStatusWrapper = styled.div`
     align-items: center;
     cursor: pointer;
     display: flex;
-`;
-
-export const WalletConnectionStatusDotStyled = styled(WalletConnectionStatusDot)`
-    margin-right: 10px;
 `;
 
 export const WalletConnectionStatusText = styled.span`

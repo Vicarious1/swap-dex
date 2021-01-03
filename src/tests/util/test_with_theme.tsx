@@ -8,9 +8,9 @@ import { DefaultTheme } from '../../themes/default_theme';
 const theme = new DefaultTheme();
 
 export const mountWithTheme = (children: React.ReactElement<any>) =>
-    mount(<ThemeProvider theme={theme}>{children}</ThemeProvider>);
+    mount(<ThemeProvider theme={theme as any}>{children}</ThemeProvider>);
 
 export const renderWithTheme = (children: any) =>
-    renderer.create(<ThemeProvider theme={theme}>{children}</ThemeProvider>).toJSON();
+    renderer.create(<ThemeProvider theme={theme as any}>{children}</ThemeProvider>).toJSON();
 
-export const shallowWithTheme = (children: any) => shallow(<ThemeProvider theme={theme}>{children}</ThemeProvider>);
+export const shallowWithTheme = (children: any) => shallow(<ThemeProvider theme={theme as any}>{children}</ThemeProvider>);

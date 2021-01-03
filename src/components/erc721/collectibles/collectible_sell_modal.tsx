@@ -2,13 +2,13 @@ import { BigNumber } from '@0x/utils';
 import React from 'react';
 import Modal from 'react-modal';
 import { connect } from 'react-redux';
-import styled, { css, withTheme } from 'styled-components';
+import styled, { css, useTheme, withTheme } from 'styled-components';
 
 import { ZERO } from '../../../common/constants';
 import { selectCollectible } from '../../../store/collectibles/actions';
 import { getCollectibleCollectionSelected, getSelectedCollectible } from '../../../store/selectors';
 import { startSellCollectibleSteps } from '../../../store/ui/actions';
-import { Theme, themeDimensions } from '../../../themes/commons';
+import { themeDimensions } from '../../../themes/commons';
 import { todayInSeconds, tomorrow } from '../../../util/time_utils';
 import { ButtonVariant, Collectible, CollectibleCollection, OrderSide, StoreState } from '../../../util/types';
 import { BigNumberInput } from '../../common/big_number_input';
@@ -32,11 +32,7 @@ interface DispatchProps {
     updateSelectedCollectible: (collectible: Collectible | null) => any;
 }
 
-interface OwnProps {
-    theme: Theme;
-}
-
-type Props = OwnProps & DispatchProps & StateProps;
+type Props =  DispatchProps & StateProps;
 
 interface State {
     startPrice: BigNumber | null;
@@ -284,7 +280,8 @@ class CollectibleSellModalContainer extends React.Component<Props> {
     };
 
     public render = () => {
-        const { theme, currentCollectible, collectibleCollection } = this.props;
+        const {currentCollectible, collectibleCollection } = this.props;
+        const theme=useTheme();
         const { startPrice } = this.state;
         const dayInSeconds = 60 * 60 * 24;
         const today = todayInSeconds();
@@ -475,6 +472,6 @@ const mapDispatchToProps = (dispatch: any): DispatchProps => {
     };
 };
 
-const CollectibleSellModal = withTheme(connect(mapStateToProps, mapDispatchToProps)(CollectibleSellModalContainer));
+const CollectibleSellModal = connect(mapStateToProps, mapDispatchToProps)(CollectibleSellModalContainer);
 
 export { CollectibleSellModal };

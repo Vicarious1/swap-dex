@@ -62,15 +62,15 @@ const StyledHr = styled.hr`
     border-color: ${props => props.theme.componentsTheme.dropdownBorderColor};
 `;
 
-const TD = styled(CustomTD)`
+const TD = styled(CustomTD as any)`
     font-size: ${props => props.theme.componentsTheme.marketDetailsTDFontSize};
 `;
-const TDToken = styled(TD)`
+const TDToken = styled(TD as any)`
     display: flex;
     flex-direction: row;
 `;
 
-const THStyled = styled(TH)`
+const THStyled = styled(TH as any)`
     font-size: ${props => props.theme.componentsTheme.marketDetailsTHFontSize};
 `;
 

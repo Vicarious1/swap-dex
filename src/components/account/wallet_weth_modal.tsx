@@ -51,7 +51,26 @@ const sliderThumbProps = `
     height: ${sliderThumbDimensions};
     width: ${sliderThumbDimensions};
 `;
-const Slider = styled.input`
+
+type SliderProps = { 
+    max:string,
+    min:string ,
+    onChange:(event:any)=> void,
+    step:string,
+    vars:string,
+    type:string,
+    value:string,
+    style:React.CSSProperties
+ };
+type SliderState = { };
+class SliderBase extends React.Component<SliderProps,SliderState> {
+  render() {
+    return <input type={this.props.type} value={this.props.value} max={this.props.max} min={this.props.min} step={this.props.step} onChange={this.props.onChange}/>;
+  }
+}
+
+const Slider = styled(SliderBase)`
+    ${props =>props.vars}
     --range: calc(var(--max) - var(--min));
     --ratio: calc((var(--val) - var(--min)) / var(--range));
     --sx: calc(0.5 * ${sliderThumbDimensions} + var(--ratio) * (100% - ${sliderThumbDimensions}));
@@ -106,6 +125,8 @@ const Slider = styled.input`
         border: 0;
     }
 `;
+
+
 
 const Button = styled(ButtonBase)`
     width: 100%;
@@ -334,11 +355,12 @@ class WethModal extends React.Component<Props, State> {
                     min="0"
                     onChange={this._updateSelectedWeth}
                     step="0.01"
-                    style={{
+                    vars="
                         '--min': '0',
                         '--max': totalEthStr,
                         '--val': selectedWethStr,
-                        '--color': 'red',
+                    "
+                    style={{
                         color: 'var(--color)',
                     }}
                     type="range"

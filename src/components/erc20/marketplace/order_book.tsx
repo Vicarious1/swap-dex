@@ -1,7 +1,7 @@
 import { BigNumber } from '@0x/utils';
 import React from 'react';
 import { connect } from 'react-redux';
-import styled, { withTheme } from 'styled-components';
+import styled, { DefaultTheme ,withTheme} from 'styled-components';
 
 import { UI_DECIMALS_DISPLAYED_SPREAD_PERCENT, ZERO } from '../../../common/constants';
 import {
@@ -69,7 +69,7 @@ interface StateProps {
 }
 
 interface OwnProps {
-    theme: Theme;
+    theme:DefaultTheme;
     defaultDepth?: number;
 }
 
@@ -381,13 +381,13 @@ class OrderBookTable extends React.Component<Props, StateOrderBook> {
             baseToken,
             quoteToken,
             web3State,
-            theme,
             absoluteSpread,
             percentageSpread,
             currencyPair,
             totalQuoteBuyOrders,
             totalBaseSellOrders,
             serverState,
+            theme
         } = this.props;
         const { sellOrders, buyOrders, mySizeOrders } = orderBook;
         const mySizeSellArray = mySizeOrders.filter((order: { side: OrderSide }) => {
@@ -668,6 +668,6 @@ const mapStateToProps = (state: StoreState): StateProps => {
 };
 
 const OrderBookTableContainer = withTheme(connect(mapStateToProps)(OrderBookTable));
-const OrderBookTableWithTheme = withTheme(OrderBookTable);
+const OrderBookTableWithTheme = OrderBookTable;
 
 export { OrderBookTable, OrderBookTableWithTheme, OrderBookTableContainer };

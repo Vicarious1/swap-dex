@@ -1,7 +1,7 @@
 import React from 'react';
 import Modal from 'react-modal';
 import { useDispatch, useSelector } from 'react-redux';
-import styled, { withTheme } from 'styled-components';
+import styled, { useTheme, withTheme } from 'styled-components';
 
 import { WYRE_ID } from '../../common/constants';
 import { openFiatOnRampChooseModal, openFiatOnRampModal, setFiatType } from '../../store/actions';
@@ -43,8 +43,8 @@ const LinkButton = styled.a`
     text-decoration: none;
 `;
 
-const FiatChooseModal: React.FC<Props> = props => {
-    const { theme } = props;
+const FiatChooseModal: React.FC<{}> = props => {
+    const theme = useTheme();
     const dispatch = useDispatch();
     const isOpen = useSelector(getOpenFiatOnRampChooseModalState);
     const ethAccount = useSelector(getEthAccount);
@@ -92,4 +92,4 @@ const FiatChooseModal: React.FC<Props> = props => {
     );
 };
 
-export const FiatChooseModalContainer = withTheme(FiatChooseModal);
+export const FiatChooseModalContainer = FiatChooseModal;

@@ -220,7 +220,7 @@ export const setCollectiblesListSortType = (sortType: CollectibleSortType | null
         };
 
         if (sortType === null) {
-            delete searchObject.sort;
+            searchObject.sort=null;
         }
 
         dispatch(
@@ -241,7 +241,7 @@ export const setCollectiblesListFilterType = (filterType: CollectibleFilterType 
         };
 
         if (filterType === null) {
-            delete searchObject.filter;
+            searchObject.filter = null;
         }
 
         dispatch(

@@ -151,11 +151,8 @@ interface DispatchProps {
     onClickOpenFiatOnRampModal: () => any;
 }
 
-interface OwnProps {
-    theme: Theme;
-}
 
-type Props = StateProps & DispatchProps & OwnProps;
+type Props = StateProps & DispatchProps;
 
 interface State {
     modalBuyEthIsOpen: boolean;
@@ -417,6 +414,6 @@ const mapDispatchToProps = (dispatch: any) => {
     };
 };
 
-const WalletBalanceContainer = withTheme(connect(mapStateToProps, mapDispatchToProps)(WalletBalance));
+const WalletBalanceContainer = connect(mapStateToProps, mapDispatchToProps)(WalletBalance);
 
 export { WalletBalance, WalletBalanceContainer };

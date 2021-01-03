@@ -2,7 +2,7 @@ import { assetDataUtils, SignedOrder } from '@0x/order-utils';
 import { BigNumber } from '@0x/utils';
 import React, { useEffect } from 'react';
 import { connect } from 'react-redux';
-import styled, { withTheme } from 'styled-components';
+import styled, { DefaultTheme, withTheme } from 'styled-components';
 
 import { INSTANT_FEE_PERCENTAGE, NETWORK_ID } from '../../../common/constants';
 import { fetchLaunchpad, openFiatOnRampModal, startTranferTokenSteps } from '../../../store/actions';
@@ -52,7 +52,7 @@ interface StateProps {
     orders: SignedOrder[] | undefined;
 }
 interface OwnProps {
-    theme: Theme;
+    theme: DefaultTheme;
     windowWidth: number;
 }
 const TokenListCard = styled(Card)`
@@ -490,9 +490,7 @@ const mapDispatchToProps = {
     onClickOpenFiatOnRampModal: openFiatOnRampModal,
 };
 
-const IEOTokenBalancesContainer = withTheme(
-    withWindowWidth(connect(mapStateToProps, mapDispatchToProps)(IEOTokenBalances)),
-);
+const IEOTokenBalancesContainer = withTheme(withWindowWidth(connect(mapStateToProps, mapDispatchToProps)(IEOTokenBalances)));
 
 // tslint:disable-next-line: max-file-line-count
 export { IEOTokenBalances, IEOTokenBalancesContainer };

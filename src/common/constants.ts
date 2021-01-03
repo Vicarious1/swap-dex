@@ -5,7 +5,7 @@ import { Network, ProviderType } from '../util/types';
 import { ChainId } from '../util/types/swap';
 
 export const ERC20_APP_BASE_PATH = '/erc20';
-export const MARKET_APP_BASE_PATH = '/market-trade';
+export const MARKET_APP_BASE_PATH = '/swap';
 export const LAUNCHPAD_APP_BASE_PATH = '/launchpad';
 export const MARGIN_APP_BASE_PATH = '/margin';
 export const DEFI_APP_BASE_PATH = '/defi';
@@ -222,14 +222,12 @@ const DEFAULT_QUOTE_SLIPPAGE_PERCENTAGE = 0.03; // 3% Slippage
 // const DEFAULT_FALLBACK_SLIPPAGE_PERCENTAGE = 0.015; // 1.5% Slippage in a fallback route
 
 export const ASSET_SWAPPER_MARKET_ORDERS_OPTS: Partial<SwapQuoteRequestOpts> = {
-    noConflicts: true,
     excludedSources: EXCLUDED_SOURCES,
     bridgeSlippage: DEFAULT_QUOTE_SLIPPAGE_PERCENTAGE,
     // maxFallbackSlippage: DEFAULT_FALLBACK_SLIPPAGE_PERCENTAGE,
     numSamples: 13,
     sampleDistributionBase: 1.05,
     runLimit: 4096,
-    dustFractionThreshold: 0.0025,
     // feeSchedule,
     // gasSchedule,
 };

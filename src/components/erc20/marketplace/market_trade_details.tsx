@@ -34,12 +34,12 @@ const Value = styled.div`
     white-space: nowrap;
 `;
 
-const CostValue = styled(Value)`
+const CostValue = styled(Value as any)`
     font-feature-settings: 'tnum' 1;
     font-weight: bold;
 `;
 
-const StyledTooltip = styled(Tooltip)`
+const StyledTooltip = styled(Tooltip as any)`
     margin-left: 5px;
 `;
 
@@ -73,19 +73,19 @@ const Span = styled.span`
     margin: 0;
 `;
 
-const MainLabel = styled(Label)``;
+const MainLabel = styled(Label as any)``;
 
 /*const FeeLabel = styled(Label)`
     color: ${props => props.theme.componentsTheme.textColorCommon};
     font-weight: normal;
 `;*/
 
-const CostLabel = styled(Label)`
+const CostLabel = styled(Label as any)`
     font-weight: 700;
     display: flex;
 `;
 
-const PointerLabel = styled(Label)`
+const PointerLabel = styled(Label as any)`
     font-weight: 700;
     display: flex;
     :hover {

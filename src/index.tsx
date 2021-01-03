@@ -4,7 +4,7 @@ import ReactDOM from 'react-dom';
 // import ReactGA from 'react-ga';
 import ReactModal from 'react-modal';
 import { Provider } from 'react-redux';
-import { Redirect, Route, Switch } from 'react-router';
+import { Redirect, Route, Switch } from 'react-router-dom';
 import 'sanitize.css';
 
 import {
@@ -23,7 +23,8 @@ import { AppContainer } from './components/app';
 import { PageLoading } from './components/common/page_loading';
 import './index.css';
 import * as serviceWorker from './serviceWorker';
-import { history, store } from './store';
+import { history } from './store';
+import store from './store'
 import { envUtil } from './util/env';
 /*import Erc20App from './components/erc20/erc20_app';
 import LaunchpadApp from './components/erc20/launchpad_app';
@@ -51,7 +52,7 @@ const InstantApp = lazy(() => import('./components/erc20/instant_app'));
 const Erc721App = lazy(() => import('./components/erc721/erc721_app'));
 const FiatApp = lazy(() => import('./components/erc20/fiat_ramp_app'));
 const MarketTradeApp = lazy(() => import('./components/erc20/market_trade_app'));
-
+const PoolApp = lazy(() => import('./components/erc20/pool_app'));
 const Web3WrappedApp = (
     <Provider store={store}>
         <ConnectedRouter history={history}>
@@ -66,6 +67,7 @@ const Web3WrappedApp = (
                         <Route path={ERC721_APP_BASE_PATH} component={Erc721App} />
                         <Route path={FIAT_RAMP_APP_BASE_PATH} component={FiatApp} />
                         <Route path={MARKET_APP_BASE_PATH} component={MarketTradeApp} />
+                        <Route path="/pool" component={PoolApp} />
                         <Route component={RedirectToHome} />
                     </Switch>
                 </Suspense>

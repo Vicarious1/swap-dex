@@ -240,12 +240,13 @@ export class UDFCompatibleDatafeedBase implements IExternalDatafeed, IDatafeedQu
 			this._send<UdfSearchSymbolsResponse | UdfErrorResponse>('search', params)
 				.then((response: UdfSearchSymbolsResponse | UdfErrorResponse) => {
 					if (response.s !== undefined) {
-						logMessage(`UdfCompatibleDatafeed: search symbols error=${response.errmsg}`);
+						let err = response as UdfErrorResponse;
+						logMessage(`UdfCompatibleDatafeed: search symbols error=${err.errmsg}`);
 						onResult([]);
 						return;
 					}
 
-					onResult(response);
+					onResult(response as UdfSearchSymbolsResponse);
 				})
 				.catch((reason?: string | Error) => {
 					logMessage(`UdfCompatibleDatafeed: Search symbols for '${userInput}' failed. Error=${getErrorMessage(reason)}`);
@@ -281,7 +282,7 @@ export class UDFCompatibleDatafeedBase implements IExternalDatafeed, IDatafeedQu
 					if (response.s !== undefined) {
 						onError('unknown_symbol');
 					} else {
-						onResultReady(response);
+						onResultReady(response as ResolveSymbolResponse);
 					}
 				})
 				.catch((reason?: string | Error) => {

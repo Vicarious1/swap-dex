@@ -6,7 +6,7 @@ import styled from 'styled-components';
 import { USE_RELAYER_MARKET_UPDATES } from '../../../common/constants';
 import { changeMarket, goToHome } from '../../../store/actions';
 import { getBaseToken, getFills, getQuoteToken, getWeb3State } from '../../../store/selectors';
-import { themeBreakPoints } from '../../../themes/commons';
+import { themeBreakPoints , themeDimensions} from '../../../themes/commons';
 import { getCurrencyPairByTokensSymbol } from '../../../util/known_currency_pairs';
 import { isWeth } from '../../../util/known_tokens';
 import { tokenAmountInUnits } from '../../../util/tokens';
@@ -14,7 +14,7 @@ import { CurrencyPair, Fill, OrderSide, StoreState, Token, Web3State } from '../
 import { Card } from '../../common/card';
 import { EmptyContent } from '../../common/empty_content';
 import { LoadingWrapper } from '../../common/loading';
-import { CustomTD, Table, TH, THead, TR } from '../../common/table';
+import { CustomTD, TableTDProps, Table, TH, THead, TR } from '../../common/table';
 
 const DexTradesList = styled(Card)`
     height: 100%;
@@ -38,11 +38,51 @@ interface DispatchProps {
 
 type Props = StateProps & DispatchProps;
 
-const SideTD = styled(CustomTD)<{ side: OrderSide }>`
+
+type SideTDProps= TableTDProps & { side: OrderSide }
+
+const SideTD = styled.td<SideTDProps>`
+    border-bottom: ${props =>
+        props.styles && props.styles.borderBottom
+            ? `1px solid ${props.theme.componentsTheme.tableBorderColor}`
+            : 'none'};
+    border-top: ${props =>
+        props.styles && props.styles.borderTop ? `1px solid ${props.theme.componentsTheme.tableBorderColor}` : 'none'};
+    font-feature-settings: 'tnum' ${props => (props.styles && props.styles.tabular ? '1' : '0')};
+    font-size: ${props =>
+        props.styles && props.styles.fontSize ? props.styles.fontSize : props.theme.componentsTheme.tdFontSize};
+    font-weight: ${props => (props.styles && props.styles.fontWeight ? props.styles.fontWeight : 'normal')};
+    line-height: ${props => (props.styles && props.styles.lineWeight ? props.styles.lineWeight : '1.2')};
+    padding: 5px ${themeDimensions.horizontalPadding} 5px 0;
+    text-align: ${props =>
+        props.styles && props.styles.textAlign && props.styles.textAlign.length ? props.styles.textAlign : 'left'};
+
+    &:last-child {
+        padding-right: 0;
+    }
     color: ${props =>
         props.side === OrderSide.Buy ? props.theme.componentsTheme.green : props.theme.componentsTheme.red};
 `;
-export const ClicableTD = styled(CustomTD)`
+export const ClicableTD = styled.td<TableTDProps>`
+    border-bottom: ${props =>
+        props.styles && props.styles.borderBottom
+            ? `1px solid ${props.theme.componentsTheme.tableBorderColor}`
+            : 'none'};
+    border-top: ${props =>
+        props.styles && props.styles.borderTop ? `1px solid ${props.theme.componentsTheme.tableBorderColor}` : 'none'};
+    color: ${props => (props.styles && props.styles.color ? props.styles.color : props.theme.componentsTheme.tdColor)};
+    font-feature-settings: 'tnum' ${props => (props.styles && props.styles.tabular ? '1' : '0')};
+    font-size: ${props =>
+        props.styles && props.styles.fontSize ? props.styles.fontSize : props.theme.componentsTheme.tdFontSize};
+    font-weight: ${props => (props.styles && props.styles.fontWeight ? props.styles.fontWeight : 'normal')};
+    line-height: ${props => (props.styles && props.styles.lineWeight ? props.styles.lineWeight : '1.2')};
+    padding: 5px ${themeDimensions.horizontalPadding} 5px 0;
+    text-align: ${props =>
+        props.styles && props.styles.textAlign && props.styles.textAlign.length ? props.styles.textAlign : 'left'};
+
+    &:last-child {
+        padding-right: 0;
+    }
     cursor: pointer;
 `;
 

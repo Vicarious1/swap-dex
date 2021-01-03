@@ -45,6 +45,6 @@ const VeriSafeStickerContainer = (props: Props) => {
     );
 };
 
-const VeriSafeStickerIcon = withTheme(VeriSafeStickerContainer);
+const VeriSafeStickerIcon = VeriSafeStickerContainer;
 
 export { VeriSafeStickerIcon };

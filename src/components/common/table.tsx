@@ -20,7 +20,7 @@ interface TableProps {
     styles?: TableStyleProps;
 }
 
-interface TableTDProps {
+export interface TableTDProps {
     styles?: TableStyleProps;
 }
 
@@ -77,6 +77,37 @@ export const TH = styled.th<TableTDProps>`
     }
 `;
 
+
+export const THStyled = styled.th<TableTDProps>`
+    border-bottom: ${props =>
+        props.styles && props.styles.borderBottom
+            ? `1px solid ${props.theme.componentsTheme.tableBorderColor}`
+            : 'none'};
+    border-top: ${props =>
+        props.styles && props.styles.borderTop ? `1px solid ${props.theme.componentsTheme.tableBorderColor}` : 'none'};
+    color: ${props => (props.styles && props.styles.color ? props.styles.color : props.theme.componentsTheme.thColor)};
+    font-size: ${props =>
+        props.styles && props.styles.fontSize ? props.styles.fontSize : props.theme.componentsTheme.thFontSize};
+    font-weight: 500;
+    letter-spacing: 0.5px;
+    line-height: 1.2;
+    padding: 0 ${themeDimensions.horizontalPadding} 5px 0;
+    text-align: ${props =>
+        props.styles && props.styles.textAlign && props.styles.textAlign.length ? props.styles.textAlign : 'left'};
+    text-transform: ${props => (props.styles && props.styles.textTransform ? props.styles.textTransform : 'uppercase')};
+    white-space: nowrap;
+
+    &:last-child {
+        padding-right: 0;
+    }
+
+    &:first-child {
+        padding-right: 0;
+    }
+`;
+
+
+
 export const CustomTD = styled.td<TableTDProps>`
     border-bottom: ${props =>
         props.styles && props.styles.borderBottom
@@ -99,34 +130,173 @@ export const CustomTD = styled.td<TableTDProps>`
     }
 `;
 
-export const CustomTDFirst = styled(CustomTD)`
+export const CustomTDFirst =  styled.td<TableTDProps>`
+    border-bottom: ${props =>
+        props.styles && props.styles.borderBottom
+            ? `1px solid ${props.theme.componentsTheme.tableBorderColor}`
+            : 'none'};
+    border-top: ${props =>
+        props.styles && props.styles.borderTop ? `1px solid ${props.theme.componentsTheme.tableBorderColor}` : 'none'};
+    color: ${props => (props.styles && props.styles.color ? props.styles.color : props.theme.componentsTheme.tdColor)};
+    font-feature-settings: 'tnum' ${props => (props.styles && props.styles.tabular ? '1' : '0')};
+    font-size: ${props =>
+        props.styles && props.styles.fontSize ? props.styles.fontSize : props.theme.componentsTheme.tdFontSize};
+    font-weight: ${props => (props.styles && props.styles.fontWeight ? props.styles.fontWeight : 'normal')};
+    line-height: ${props => (props.styles && props.styles.lineWeight ? props.styles.lineWeight : '1.2')};
+    padding: 5px ${themeDimensions.horizontalPadding} 5px 0;
+    text-align: ${props =>
+        props.styles && props.styles.textAlign && props.styles.textAlign.length ? props.styles.textAlign : 'left'};
+
     &,
     &:last-child {
         padding-left: ${themeDimensions.horizontalPadding};
     }
 `;
 
-export const CustomTDLast = styled(CustomTD)`
+export const CustomTDLast = styled.td<TableTDProps>`
+    border-bottom: ${props =>
+        props.styles && props.styles.borderBottom
+            ? `1px solid ${props.theme.componentsTheme.tableBorderColor}`
+            : 'none'};
+    border-top: ${props =>
+        props.styles && props.styles.borderTop ? `1px solid ${props.theme.componentsTheme.tableBorderColor}` : 'none'};
+    color: ${props => (props.styles && props.styles.color ? props.styles.color : props.theme.componentsTheme.tdColor)};
+    font-feature-settings: 'tnum' ${props => (props.styles && props.styles.tabular ? '1' : '0')};
+    font-size: ${props =>
+        props.styles && props.styles.fontSize ? props.styles.fontSize : props.theme.componentsTheme.tdFontSize};
+    font-weight: ${props => (props.styles && props.styles.fontWeight ? props.styles.fontWeight : 'normal')};
+    line-height: ${props => (props.styles && props.styles.lineWeight ? props.styles.lineWeight : '1.2')};
+    padding: 5px ${themeDimensions.horizontalPadding} 5px 0;
+    text-align: ${props =>
+        props.styles && props.styles.textAlign && props.styles.textAlign.length ? props.styles.textAlign : 'left'};
     &,
     &:last-child {
         padding-right: ${themeDimensions.horizontalPadding};
     }
 `;
 
-export const CustomTDTitle = styled(CustomTD)`
+export const CustomTDTitle = styled.td<TableTDProps>`
     color: ${props => (props.styles && props.styles.color ? props.styles.color : props.theme.componentsTheme.thColor)};
     font-size: 12px;
     text-transform: uppercase;
 `;
 
-export const THFirst = styled(TH)`
+export const CustomTDTokenName = styled.td<TableTDProps>`
+    border-bottom: ${props =>
+        props.styles && props.styles.borderBottom
+            ? `1px solid ${props.theme.componentsTheme.tableBorderColor}`
+            : 'none'};
+    border-top: ${props =>
+        props.styles && props.styles.borderTop ? `1px solid ${props.theme.componentsTheme.tableBorderColor}` : 'none'};
+    color: ${props => (props.styles && props.styles.color ? props.styles.color : props.theme.componentsTheme.tdColor)};
+    font-feature-settings: 'tnum' ${props => (props.styles && props.styles.tabular ? '1' : '0')};
+    font-size: ${props =>
+        props.styles && props.styles.fontSize ? props.styles.fontSize : props.theme.componentsTheme.tdFontSize};
+    font-weight: ${props => (props.styles && props.styles.fontWeight ? props.styles.fontWeight : 'normal')};
+    line-height: ${props => (props.styles && props.styles.lineWeight ? props.styles.lineWeight : '1.2')};
+    padding: 5px ${themeDimensions.horizontalPadding} 5px 0;
+    text-align: ${props =>
+        props.styles && props.styles.textAlign && props.styles.textAlign.length ? props.styles.textAlign : 'left'};
+
+    &:last-child {
+        padding-right: 0;
+    }
+    white-space: nowrap;
+`;
+
+export const CustomTDMobile = styled.td<TableTDProps>`
+    border-bottom: ${props =>
+        props.styles && props.styles.borderBottom
+            ? `1px solid ${props.theme.componentsTheme.tableBorderColor}`
+            : 'none'};
+    border-top: ${props =>
+        props.styles && props.styles.borderTop ? `1px solid ${props.theme.componentsTheme.tableBorderColor}` : 'none'};
+    color: ${props => (props.styles && props.styles.color ? props.styles.color : props.theme.componentsTheme.tdColor)};
+    font-feature-settings: 'tnum' ${props => (props.styles && props.styles.tabular ? '1' : '0')};
+    font-size: ${props =>
+        props.styles && props.styles.fontSize ? props.styles.fontSize : props.theme.componentsTheme.tdFontSize};
+    font-weight: ${props => (props.styles && props.styles.fontWeight ? props.styles.fontWeight : 'normal')};
+    line-height: ${props => (props.styles && props.styles.lineWeight ? props.styles.lineWeight : '1.2')};
+    padding: 5px ${themeDimensions.horizontalPadding} 5px 0;
+    text-align: ${props =>
+        props.styles && props.styles.textAlign && props.styles.textAlign.length ? props.styles.textAlign : 'left'};
+
+    &:last-child {
+        padding-right: 0;
+    }
+    max-width: 30px;
+    display: block;
+`;
+
+export const TokenTD = styled.td<TableTDProps>`
+    border-bottom: ${props =>
+        props.styles && props.styles.borderBottom
+            ? `1px solid ${props.theme.componentsTheme.tableBorderColor}`
+            : 'none'};
+    border-top: ${props =>
+        props.styles && props.styles.borderTop ? `1px solid ${props.theme.componentsTheme.tableBorderColor}` : 'none'};
+    color: ${props => (props.styles && props.styles.color ? props.styles.color : props.theme.componentsTheme.tdColor)};
+    font-feature-settings: 'tnum' ${props => (props.styles && props.styles.tabular ? '1' : '0')};
+    font-size: ${props =>
+        props.styles && props.styles.fontSize ? props.styles.fontSize : props.theme.componentsTheme.tdFontSize};
+    font-weight: ${props => (props.styles && props.styles.fontWeight ? props.styles.fontWeight : 'normal')};
+    line-height: ${props => (props.styles && props.styles.lineWeight ? props.styles.lineWeight : '1.2')};
+    padding: 5px ${themeDimensions.horizontalPadding} 5px 0;
+    text-align: ${props =>
+        props.styles && props.styles.textAlign && props.styles.textAlign.length ? props.styles.textAlign : 'left'};
+
+    &:last-child {
+        padding-right: 0;
+    }
+    padding-bottom: 10px;
+    padding-right: 0;
+    padding-top: 10px;
+    width: 40px;
+`;
+
+
+export const THFirst = styled.th<TableTDProps>`
+    border-bottom: ${props =>
+        props.styles && props.styles.borderBottom
+            ? `1px solid ${props.theme.componentsTheme.tableBorderColor}`
+            : 'none'};
+    border-top: ${props =>
+        props.styles && props.styles.borderTop ? `1px solid ${props.theme.componentsTheme.tableBorderColor}` : 'none'};
+    color: ${props => (props.styles && props.styles.color ? props.styles.color : props.theme.componentsTheme.thColor)};
+    font-size: ${props =>
+        props.styles && props.styles.fontSize ? props.styles.fontSize : props.theme.componentsTheme.thFontSize};
+    font-weight: 500;
+    letter-spacing: 0.5px;
+    line-height: 1.2;
+    padding: 0 ${themeDimensions.horizontalPadding} 5px 0;
+    text-align: ${props =>
+        props.styles && props.styles.textAlign && props.styles.textAlign.length ? props.styles.textAlign : 'left'};
+    text-transform: ${props => (props.styles && props.styles.textTransform ? props.styles.textTransform : 'uppercase')};
+    white-space: nowrap;
     &,
     &:last-child {
         padding-left: ${themeDimensions.horizontalPadding};
     }
 `;
 
-export const THLast = styled(TH)`
+export const THLast = styled.th<TableTDProps>`
+    border-bottom: ${props =>
+        props.styles && props.styles.borderBottom
+            ? `1px solid ${props.theme.componentsTheme.tableBorderColor}`
+            : 'none'};
+    border-top: ${props =>
+        props.styles && props.styles.borderTop ? `1px solid ${props.theme.componentsTheme.tableBorderColor}` : 'none'};
+    color: ${props => (props.styles && props.styles.color ? props.styles.color : props.theme.componentsTheme.thColor)};
+    font-size: ${props =>
+        props.styles && props.styles.fontSize ? props.styles.fontSize : props.theme.componentsTheme.thFontSize};
+    font-weight: 500;
+    letter-spacing: 0.5px;
+    line-height: 1.2;
+    padding: 0 ${themeDimensions.horizontalPadding} 5px 0;
+    text-align: ${props =>
+        props.styles && props.styles.textAlign && props.styles.textAlign.length ? props.styles.textAlign : 'left'};
+    text-transform: ${props => (props.styles && props.styles.textTransform ? props.styles.textTransform : 'uppercase')};
+white-space: nowrap;
     &,
     &:last-child {
         padding-right: ${themeDimensions.horizontalPadding};

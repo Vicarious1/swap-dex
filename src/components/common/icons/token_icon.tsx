@@ -51,6 +51,6 @@ const TokenIconContainer = (props: Props) => {
     );
 };
 
-const TokenIcon = withTheme(TokenIconContainer);
+const TokenIcon = withTheme(TokenIconContainer as any);
 
 export { TokenIcon };

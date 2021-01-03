@@ -157,9 +157,14 @@ const ModalStatusText = styled.p`
     text-align: center;
 `;
 
-const ModalStatusTextLight = styled(ModalStatusText)`
-    color: ${props => props.theme.componentsTheme.textLight};
+const ModalStatusTextLight = styled.p`
+    color: ${props => props.theme.componentsTheme.textLighter};
+    font-size: 14px;
+    font-weight: 500;
+    line-height: 1.2;
+    margin: 0;
     margin-bottom: 0px;
+    text-align: center;
     padding: 0;
 `;
 

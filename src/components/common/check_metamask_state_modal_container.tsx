@@ -1,5 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
+import { useTheme } from 'styled-components';
 
 import { goToHome, initWallet } from '../../store/actions';
 import { getWeb3State } from '../../store/selectors';
@@ -30,7 +31,7 @@ type Props = StateProps & DispatchProps & OwnProps;
 class CheckMetamaskStateModal extends React.Component<Props, State> {
     public state = {
         shouldOpenModal: true,
-        modalToDisplay: null,
+        modalToDisplay: ModalDisplay.NoModal,
     };
 
     public componentDidMount = () => {

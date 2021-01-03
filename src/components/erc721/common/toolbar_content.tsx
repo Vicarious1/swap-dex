@@ -1,6 +1,6 @@
 import React from 'react';
 import { connect, useDispatch } from 'react-redux';
-import styled, { withTheme } from 'styled-components';
+import styled, { useTheme, withTheme } from 'styled-components';
 
 import { openFiatOnRampModal, setFiatType } from '../../../store/actions';
 import { goToHome, goToMyCollectibles } from '../../../store/router/actions';
@@ -19,11 +19,8 @@ interface DispatchProps {
     goToMyCollectibles: () => any;
 }
 
-interface OwnProps {
-    theme: Theme;
-}
 
-type Props = DispatchProps & OwnProps;
+type Props = DispatchProps;
 
 const MyWalletLink = styled.a`
     align-items: center;
@@ -79,6 +76,7 @@ const CollectiblesCollectionDropdownHeader = styled<any>(CollectiblesCollectionD
 
 const ToolbarContent = (props: Props) => {
     const logo = <LogoSVGStyled icon={'assets/icons/vsf_light.svg'} />;
+    const theme=useTheme();
     const dispatch = useDispatch();
     const handleFiatModal: React.EventHandler<React.MouseEvent> = e => {
         e.preventDefault();
@@ -96,7 +94,7 @@ const ToolbarContent = (props: Props) => {
                 image={logo}
                 onClick={handleLogoClick}
                 text="VeriCollectibles"
-                textColor={props.theme.componentsTheme.logoERC721TextColor}
+                textColor={theme.componentsTheme.logoERC721TextColor}
             />
             <CollectiblesCollectionDropdownHeader shouldCloseDropdownBodyOnClick={false} />
         </>
@@ -118,7 +116,7 @@ const ToolbarContent = (props: Props) => {
             <NotificationsDropdownContainer />
         </>
     );
-    const centerContent = <CollectiblesSearch theme={props.theme} />;
+    const centerContent = <CollectiblesSearch/>;
 
     return <ToolbarContainer startContent={startContent} centerContent={centerContent} endContent={endContent} />;
 };
@@ -130,6 +128,6 @@ const mapDispatchToProps = (dispatch: any): DispatchProps => {
     };
 };
 
-const ToolbarContentContainer = withTheme(connect(null, mapDispatchToProps)(ToolbarContent));
+const ToolbarContentContainer = connect(null, mapDispatchToProps)(ToolbarContent);
 
 export { ToolbarContent, ToolbarContentContainer };

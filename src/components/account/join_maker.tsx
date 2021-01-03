@@ -19,7 +19,7 @@ const ButtonStyled = styled(Button)`
     width: 100%;
 `;
 
-const JoinAsMaker = () => {
+const JoinAsMaker = (props:any) => {
     const ethAccount = useSelector(getEthAccount);
     const handleJoinAsMaker = () => {
         // tslint:disable-next-line:no-floating-promises

@@ -1,7 +1,7 @@
 import { BigNumber } from '@0x/utils';
 import React, { useEffect, useState } from 'react';
 import { connect } from 'react-redux';
-import styled, { withTheme } from 'styled-components';
+import styled, { useTheme, withTheme } from 'styled-components';
 
 import { NETWORK_ID, RELAYER_URL } from '../../common/constants';
 import { initBZX, openFiatOnRampModal, startLendingTokenSteps, startUnLendingTokenSteps } from '../../store/actions';
@@ -58,7 +58,6 @@ interface StateProps {
     bzxLoadingState: BZXLoadingState;
 }
 interface OwnProps {
-    theme: Theme;
     windowWidth: number;
 }
 
@@ -155,9 +154,9 @@ const WalletLendingBalances: React.FC<Props> = props => {
     const [isEthState, setIsEthState] = useState(false);
     const [isModalOpenState, setIsModalOpenState] = useState(false);
     const [isSubmittingState, setIsSubmittingState] = useState(false);
-    const [iTokenDataState, setITokenDataState] = useState();
+    const [iTokenDataState, setITokenDataState] = useState<iTokenData | undefined>(undefined);
     const [isLendingState, setIsLendingState] = useState(true);
-    const [tokenBalanceState, setTokenBalanceState] = useState();
+    const [tokenBalanceState, setTokenBalanceState] =  useState<TokenBalance>();
 
     const {
         ethBalance,
@@ -166,7 +165,6 @@ const WalletLendingBalances: React.FC<Props> = props => {
         web3State,
         wethTokenBalance,
         ethAccount,
-        theme,
         tokensPrice,
         wallet,
         onClickOpenFiatOnRampModal,
@@ -176,6 +174,7 @@ const WalletLendingBalances: React.FC<Props> = props => {
         windowWidth,
     } = props;
 
+    const theme = useTheme();
     useEffect(() => {
         if (ethAccount) {
             // tslint:disable-next-line: no-floating-promises
@@ -190,12 +189,13 @@ const WalletLendingBalances: React.FC<Props> = props => {
 
     const tokensRows = () =>
         iTokensData.map((tokenD, index) => {
+            console.log(tokenD);
             const { token, balance, supplyInterestRate } = tokenD;
             const { symbol } = token;
             const isEthToken = isWethToken(token);
             const tokenBalance = tokenBalances.find(tb => tb.token.symbol === symbol) as Required<TokenBalance>;
 
-            const tokB = isEthToken
+            const tokB: BigNumber = isEthToken
                 ? ethTotalBalance || new BigNumber(0)
                 : (tokenBalance && tokenBalance.balance) || new BigNumber(0);
 
@@ -216,7 +216,7 @@ const WalletLendingBalances: React.FC<Props> = props => {
                 setIsModalOpenState(true);
                 if (isEthToken) {
                     setIsEthState(true);
-                    setTokenBalanceState({ ...wethTokenBalance, balance: tokB });
+                    setTokenBalanceState({...wethTokenBalance as TokenBalance, balance: tokB });
                 } else {
                     setIsEthState(false);
                     setTokenBalanceState(tokenBalances.find(tb => tb.token === token));
@@ -228,7 +228,7 @@ const WalletLendingBalances: React.FC<Props> = props => {
                 setITokenDataState(tokenD);
                 if (isEthToken) {
                     setIsEthState(true);
-                    setTokenBalanceState({ ...wethTokenBalance, balance: tokB });
+                    setTokenBalanceState({...wethTokenBalance as TokenBalance, balance: tokB });
                 } else {
                     setIsEthState(false);
                     setTokenBalanceState(tokenBalances.find(tb => tb.token === token));
@@ -506,10 +506,10 @@ const WalletLendingBalances: React.FC<Props> = props => {
                     {isModalOpenState && (
                         <LendingTokenModal
                             isOpen={isModalOpenState}
-                            tokenBalance={tokenBalanceState}
+                            tokenBalance={tokenBalanceState as TokenBalance}
                             isSubmitting={isSubmittingState}
                             onSubmit={handleSubmit}
-                            iToken={iTokenDataState}
+                            iToken={iTokenDataState as iTokenData}
                             style={theme.modalTheme}
                             closeModal={closeModal}
                             ethBalance={wethPlusEthBalance}
@@ -522,6 +522,7 @@ const WalletLendingBalances: React.FC<Props> = props => {
                 </>
             );
         } else {
+            debugger;
             content = (
                 <>
                     <Table isResponsive={true}>
@@ -545,10 +546,10 @@ const WalletLendingBalances: React.FC<Props> = props => {
                     {isModalOpenState && (
                         <LendingTokenModal
                             isOpen={isModalOpenState}
-                            tokenBalance={tokenBalanceState}
+                            tokenBalance={tokenBalanceState as TokenBalance}
                             isSubmitting={isSubmittingState}
                             onSubmit={handleSubmit}
-                            iToken={iTokenDataState}
+                            iToken={iTokenDataState as iTokenData}
                             style={theme.modalTheme}
                             closeModal={closeModal}
                             ethBalance={wethPlusEthBalance}
@@ -566,13 +567,14 @@ const WalletLendingBalances: React.FC<Props> = props => {
 };
 
 const mapStateToProps = (state: StoreState): StateProps => {
+    const loadedWethTokenBalance:TokenBalance = getWethTokenBalance(state) as TokenBalance ;
     return {
         ethBalance: getEthBalance(state),
         ethTotalBalance: getTotalEthBalance(state),
         iTokensData: getITokensData(state),
         tokenBalances: getTokenBalances(state),
         web3State: getWeb3State(state),
-        wethTokenBalance: getWethTokenBalance(state),
+        wethTokenBalance: loadedWethTokenBalance,
         ethAccount: getEthAccount(state),
         ethUsd: getEthInUsd(state),
         tokensPrice: getTokensPrice(state),
@@ -587,9 +589,7 @@ const mapDispatchToProps = {
     initBZXFetching: initBZX,
 };
 
-const WalletLendingBalancesContainer = withTheme(
-    withWindowWidth(connect(mapStateToProps, mapDispatchToProps)(WalletLendingBalances)),
-);
+const WalletLendingBalancesContainer = withWindowWidth(connect(mapStateToProps, mapDispatchToProps)(WalletLendingBalances));
 
 // tslint:disable-next-line: max-file-line-count
 export { WalletLendingBalances, WalletLendingBalancesContainer };

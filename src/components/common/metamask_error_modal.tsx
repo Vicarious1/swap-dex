@@ -1,6 +1,6 @@
 import React, { HTMLAttributes } from 'react';
 import Modal from 'react-modal';
-import styled, { withTheme } from 'styled-components';
+import styled, { useTheme, withTheme } from 'styled-components';
 
 import { ReactComponent as InstallMetamaskSvg } from '../../assets/icons/install_metamask.svg';
 import { METAMASK_CHROME_EXTENSION_DOWNLOAD_URL } from '../../common/constants';
@@ -11,11 +11,9 @@ import { ButtonVariant, ModalDisplay } from '../../util/types';
 import { Button } from './button';
 import { CloseModalButton } from './icons/close_modal_button';
 
-interface OwnProps {
-    theme: Theme;
-}
 
-interface Props extends HTMLAttributes<HTMLDivElement>, OwnProps {
+
+interface Props extends HTMLAttributes<HTMLDivElement> {
     isOpen: boolean;
     closeModal: any;
     noMetamaskType: ModalDisplay;
@@ -84,7 +82,8 @@ const LinkButton = styled.a`
 `;
 
 const MetamaskErrorModalContainer: React.FC<Props> = props => {
-    const { isOpen, closeModal, noMetamaskType, connectWallet, theme } = props;
+    const { isOpen, closeModal, noMetamaskType, connectWallet} = props;
+    const theme= useTheme();
 
     const getMetamask = () => {
         window.open(METAMASK_CHROME_EXTENSION_DOWNLOAD_URL, '_blank');
@@ -138,6 +137,6 @@ const MetamaskErrorModalContainer: React.FC<Props> = props => {
     );
 };
 
-const MetamaskErrorModal = withTheme(MetamaskErrorModalContainer);
+const MetamaskErrorModal = MetamaskErrorModalContainer;
 
 export { MetamaskErrorModal };

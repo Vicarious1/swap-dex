@@ -21,7 +21,7 @@ const DefiPage = React.lazy(() => import('./pages/defi'));
 export const MarginApp = () => {
     const themeColor = useSelector(getERC20Theme);
     return (
-        <ThemeProvider theme={themeColor}>
+        <ThemeProvider theme={themeColor as any}>
             <ApolloProvider client={getAaveGraphClient()}>
                 <GeneralLayoutContainer toolbar={toolbar}>
                     <AdBlockDetector />

@@ -124,6 +124,6 @@ class DecliningPriceGraphContainer extends React.Component<Props> {
     };
 }
 
-const DecliningPriceGraph = withTheme(DecliningPriceGraphContainer);
+const DecliningPriceGraph = DecliningPriceGraphContainer;
 
 export { DecliningPriceGraph };

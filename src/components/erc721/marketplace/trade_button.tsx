@@ -97,6 +97,6 @@ export const TradeButtonContainer: React.FC<Props> = ({
     );
 };
 
-const TradeButton = withTheme(TradeButtonContainer);
+const TradeButton = TradeButtonContainer;
 
 export { TradeButton };

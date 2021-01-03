@@ -1,6 +1,6 @@
 import React, { HTMLAttributes } from 'react';
 import Modal from 'react-modal';
-import styled, { withTheme } from 'styled-components';
+import styled, { useTheme, withTheme } from 'styled-components';
 
 import { METAMASK_CHROME_EXTENSION_DOWNLOAD_URL, VERIDEX_ORIGIN } from '../../common/constants';
 import { isMetamaskInstalled } from '../../services/web3_wrapper';
@@ -13,11 +13,8 @@ import { CloseModalButton } from './icons/close_modal_button';
 import { GetCoinbaseWallet } from './icons/coinbase_wallet_get';
 import { GetTrustWallet } from './icons/trust_wallet_go';
 
-interface OwnProps {
-    theme: Theme;
-}
 
-interface Props extends HTMLAttributes<HTMLDivElement>, OwnProps {
+interface Props extends HTMLAttributes<HTMLDivElement> {
     isOpen: boolean;
     closeModal: any;
     chooseWallet: (wallet: Wallet) => any;
@@ -77,8 +74,8 @@ const MobileText = styled.p`
 `;
 
 const WalletChooseModalContainer: React.FC<Props> = props => {
-    const { isOpen, closeModal, chooseWallet, theme } = props;
-
+    const { isOpen, closeModal, chooseWallet} = props;
+    const theme = useTheme();
     const isMMInstalled = () => isMetamaskInstalled();
     // TODO: Enable and disable wallets
     //   const wallets = Config.getConfig().wallets;
@@ -171,6 +168,6 @@ const WalletChooseModalContainer: React.FC<Props> = props => {
     );
 };
 
-const WalletChooseModal = withTheme(WalletChooseModalContainer);
+const WalletChooseModal = WalletChooseModalContainer;
 
 export { WalletChooseModal };
